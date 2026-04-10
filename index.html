@@ -1,0 +1,1644 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Öğren · 9. Sınıf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1016;--surface:#181b26;--surface2:#1f2335;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#cdd6f4;--muted:#6c7086;
+  --green:#a6e3a1;--green-dim:rgba(166,227,161,0.15);
+  --red:#f38ba8;--red-dim:rgba(243,139,168,0.15);
+  --blue:#89b4fa;--blue-dim:rgba(137,180,250,0.12);
+  --amber:#fab387;--amber-dim:rgba(250,179,135,0.12);
+  --purple:#cba6f7;--purple-dim:rgba(203,166,247,0.12);
+  --teal:#94e2d5;--teal-dim:rgba(148,226,213,0.12);
+  --pink:#f5c2e7;--pink-dim:rgba(245,194,231,0.12);
+  --sky:#89dceb;--sky-dim:rgba(137,220,235,0.12);
+  --mono:'JetBrains Mono',Consolas,monospace;
+  --sans:'Inter',system-ui,sans-serif;
+  --r:8px;--r-lg:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{min-height:100%;}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);display:flex;flex-direction:column;align-items:center;padding:0 1rem 3rem;}
+#topbar{width:100%;max-width:820px;display:flex;align-items:center;justify-content:space-between;padding:1rem 0 0.5rem;border-bottom:0.5px solid var(--border);margin-bottom:1.5rem;}
+.logo{font-family:var(--mono);font-size:15px;color:var(--green);font-weight:700;}
+.logo span{color:var(--muted);font-weight:400;}
+#settings-btn{background:none;border:0.5px solid var(--border2);border-radius:var(--r);color:var(--muted);padding:5px 12px;font-size:12px;font-family:var(--sans);cursor:pointer;}
+#settings-btn:hover{color:var(--text);}
+#main{width:100%;max-width:820px;}
+#progress-wrap{margin-bottom:1.25rem;display:none;}
+#progress-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:6px;font-family:var(--mono);}
+#progress-bar-bg{height:3px;background:var(--surface2);border-radius:2px;overflow:hidden;}
+#progress-bar{height:3px;background:var(--green);border-radius:2px;transition:width 0.5s ease;}
+.topic-pill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-family:var(--mono);font-weight:500;padding:4px 10px;border-radius:20px;margin-bottom:12px;}
+.pill-if{background:var(--blue-dim);color:var(--blue);border:0.5px solid rgba(137,180,250,0.25);}
+.pill-ifelse{background:var(--sky-dim);color:var(--sky);border:0.5px solid rgba(137,220,235,0.25);}
+.pill-ifelifelse{background:var(--teal-dim);color:var(--teal);border:0.5px solid rgba(148,226,213,0.25);}
+.pill-for{background:var(--amber-dim);color:var(--amber);border:0.5px solid rgba(250,179,135,0.25);}
+.pill-while{background:var(--pink-dim);color:var(--pink);border:0.5px solid rgba(245,194,231,0.25);}
+.pill-func{background:var(--purple-dim);color:var(--purple);border:0.5px solid rgba(203,166,247,0.25);}
+#explain-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:2rem;margin-bottom:1.25rem;display:none;}
+#explain-icon{font-size:32px;margin-bottom:1rem;}
+#explain-title{font-size:20px;font-weight:600;color:var(--text);margin-bottom:0.75rem;}
+#explain-body{font-size:14px;color:var(--muted);line-height:1.8;}
+#explain-body p{margin-bottom:6px;}
+#explain-body code{font-family:var(--mono);background:var(--surface2);padding:1px 6px;border-radius:4px;color:var(--green);font-size:13px;}
+#explain-body strong{color:var(--text);font-weight:500;}
+#explain-examples{margin-top:1.25rem;background:var(--surface2);border-radius:var(--r);padding:1rem 1.25rem;font-family:var(--mono);font-size:13px;line-height:1.9;color:var(--text);border:0.5px solid var(--border);}
+.kw{color:var(--blue);}.str{color:var(--green);}.num{color:var(--amber);}.cmt{color:var(--muted);font-style:italic;}.fn{color:var(--purple);}
+#explain-footer{margin-top:1.5rem;display:flex;align-items:center;justify-content:space-between;}
+#explain-counter{font-size:12px;color:var(--muted);font-family:var(--mono);}
+#explain-next{background:var(--green-dim);border:0.5px solid var(--green);color:var(--green);border-radius:var(--r);padding:8px 20px;font-size:13px;font-family:var(--sans);font-weight:500;cursor:pointer;}
+#explain-next:hover{background:rgba(166,227,161,0.25);}
+#question-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.5rem;display:none;}
+#timer-row{display:flex;align-items:center;gap:12px;margin-bottom:1.25rem;}
+#timer-ring-wrap{position:relative;width:44px;height:44px;flex-shrink:0;}
+#timer-ring-wrap svg{transform:rotate(-90deg);}
+#timer-ring-bg{stroke:var(--surface2);fill:none;stroke-width:3;}
+#timer-ring-fg{fill:none;stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset 1s linear,stroke 0.4s;}
+#timer-num{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);}
+#q-label{flex:1;}
+#score-disp{font-size:12px;color:var(--muted);font-family:var(--mono);}
+#score-disp span{color:var(--green);font-weight:600;}
+#q-setup{font-size:14px;color:var(--muted);margin-bottom:1rem;line-height:1.6;}
+#code-wrap{background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r);padding:1.25rem 1.5rem;font-family:var(--mono);font-size:14px;line-height:2.1;white-space:pre;overflow-x:auto;margin-bottom:1.25rem;}
+.code-kw{color:var(--blue);}.code-str{color:var(--green);}.code-num{color:var(--amber);}.code-fn{color:var(--purple);}.code-cmt{color:var(--muted);font-style:italic;}
+.blank-wrap{display:inline-flex;align-items:center;vertical-align:middle;cursor:text;padding:1px 3px;border-radius:4px;border:1px dashed var(--border2);background:rgba(255,255,255,0.03);transition:border-color 0.2s,background 0.2s;}
+.blank-wrap:hover{border-color:var(--blue);}
+.blank-wrap.active{border-color:var(--blue);border-style:solid;background:var(--blue-dim);}
+.blank-wrap.done{border-color:var(--green);border-style:solid;background:var(--green-dim);}
+.slot{display:inline-block;width:10px;height:22px;line-height:22px;text-align:center;font-family:var(--mono);font-size:14px;font-weight:500;color:var(--muted);position:relative;}
+.slot.filled{color:var(--green);}
+.slot.cursor{position:relative;}
+.slot.cursor::before{content:'';position:absolute;left:0;top:3px;bottom:3px;width:2px;background:var(--blue);border-radius:1px;animation:blink 1s step-end infinite;}
+.slot.error{color:var(--red);animation:errShake 0.35s ease;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
+@keyframes errShake{0%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}100%{transform:translateX(0)}}
+#hint-area{display:flex;align-items:center;gap:8px;margin-bottom:1rem;padding:8px 12px;background:var(--surface2);border-radius:var(--r);border:0.5px solid var(--border);min-height:44px;}
+#hint-text{font-size:13px;color:var(--muted);line-height:1.5;}
+#hint-text strong{color:var(--amber);font-weight:500;}
+#error-row{display:flex;align-items:center;gap:8px;margin-bottom:1rem;}
+.err-dot{width:8px;height:8px;border-radius:50%;background:var(--border2);transition:background 0.2s;}
+.err-dot.lit{background:var(--red);}
+#err-label{font-size:12px;color:var(--muted);font-family:var(--mono);}
+.result-bar{display:none;border-radius:var(--r);padding:10px 16px;font-size:13px;font-family:var(--sans);margin-bottom:1rem;align-items:center;gap:10px;}
+.result-bar.show{display:flex;}
+#success-bar{background:var(--green-dim);border:0.5px solid rgba(166,227,161,0.3);color:var(--green);}
+#timeout-bar{background:var(--red-dim);border:0.5px solid rgba(243,139,168,0.3);color:var(--red);}
+.bar-btn{margin-left:auto;border-radius:var(--r);padding:6px 16px;font-size:12px;font-family:var(--sans);font-weight:500;cursor:pointer;white-space:nowrap;}
+#next-btn{background:var(--green-dim);border:0.5px solid var(--green);color:var(--green);}
+#next-btn:hover{background:rgba(166,227,161,0.25);}
+#timeout-next{background:var(--red-dim);border:0.5px solid var(--red);color:var(--red);}
+#timeout-next:hover{background:rgba(243,139,168,0.25);}
+#welcome{text-align:center;padding:2.5rem 1rem;}
+#welcome h1{font-size:28px;font-weight:600;color:var(--text);margin-bottom:0.75rem;}
+#welcome .sub{font-size:15px;color:var(--muted);margin-bottom:2rem;line-height:1.7;}
+#welcome .sub strong{color:var(--text);}
+.topic-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem;text-align:left;}
+@media(max-width:560px){.topic-cards{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:380px){.topic-cards{grid-template-columns:1fr;}}
+.topic-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1rem;}
+.topic-card .tc-icon{font-size:18px;margin-bottom:8px;}
+.topic-card h3{font-size:13px;font-weight:600;margin-bottom:4px;}
+.topic-card p{font-size:11px;color:var(--muted);line-height:1.5;}
+.tc-if{border-top:2px solid var(--blue);}
+.tc-ifelse{border-top:2px solid var(--sky);}
+.tc-ifelifelse{border-top:2px solid var(--teal);}
+.tc-for{border-top:2px solid var(--amber);}
+.tc-while{border-top:2px solid var(--pink);}
+.tc-func{border-top:2px solid var(--purple);}
+.welcome-stats{display:flex;justify-content:center;gap:16px;margin-bottom:2rem;flex-wrap:wrap;}
+.ws{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 16px;font-size:13px;color:var(--muted);font-family:var(--mono);}
+.ws span{color:var(--text);font-weight:600;}
+#start-btn{background:var(--green-dim);border:1px solid var(--green);color:var(--green);border-radius:var(--r-lg);padding:12px 36px;font-size:15px;font-family:var(--sans);font-weight:600;cursor:pointer;}
+#start-btn:hover{background:rgba(166,227,161,0.25);}
+#result-screen{text-align:center;display:none;}
+#result-screen h2{font-size:22px;font-weight:600;margin-bottom:0.5rem;}
+.result-sub{font-size:14px;color:var(--muted);margin-bottom:1.5rem;}
+.big-score{font-size:60px;font-weight:700;font-family:var(--mono);color:var(--green);line-height:1;margin:1rem 0 0.25rem;}
+.score-out{font-size:14px;color:var(--muted);font-family:var(--mono);margin-bottom:1.5rem;}
+.breakdown-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:2rem;}
+@media(max-width:480px){.breakdown-grid{grid-template-columns:repeat(2,1fr);}}
+.bd-card{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1rem;}
+.bd-card .bd-num{font-size:22px;font-weight:700;font-family:var(--mono);margin-bottom:4px;}
+.bd-card .bd-lbl{font-size:11px;color:var(--muted);}
+.bd-if .bd-num{color:var(--blue);}.bd-ifelse .bd-num{color:var(--sky);}.bd-ifelifelse .bd-num{color:var(--teal);}
+.bd-for .bd-num{color:var(--amber);}.bd-while .bd-num{color:var(--pink);}.bd-func .bd-num{color:var(--purple);}
+.result-msg{font-size:15px;color:var(--muted);margin-bottom:1.5rem;line-height:1.7;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.25rem;}
+#restart-btn{background:var(--surface);border:0.5px solid var(--border2);color:var(--text);border-radius:var(--r-lg);padding:10px 28px;font-size:14px;font-family:var(--sans);cursor:pointer;}
+#restart-btn:hover{background:var(--surface2);}
+#settings-modal{display:none;position:fixed;inset:0;background:rgba(14,16,22,0.88);z-index:100;align-items:center;justify-content:center;padding:1rem;}
+#settings-modal.open{display:flex;}
+#settings-box{background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.75rem;width:100%;max-width:440px;}
+#settings-box h3{font-size:16px;font-weight:600;margin-bottom:1.25rem;}
+#settings-box label{font-size:12px;color:var(--muted);display:block;margin-bottom:6px;font-family:var(--mono);}
+#api-key-input{width:100%;background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--r);padding:10px 14px;font-family:var(--mono);font-size:13px;color:var(--text);outline:none;margin-bottom:0.75rem;}
+#api-key-input:focus{border-color:var(--blue);}
+.settings-row{display:flex;gap:8px;margin-bottom:1rem;}
+.s-btn{flex:1;background:var(--surface2);border:0.5px solid var(--border2);color:var(--text);border-radius:var(--r);padding:8px;font-size:13px;font-family:var(--sans);cursor:pointer;}
+.s-btn:hover{background:rgba(255,255,255,0.05);}
+.s-btn.primary{background:var(--blue-dim);border-color:var(--blue);color:var(--blue);}
+#gen-status{font-size:12px;color:var(--muted);font-family:var(--mono);min-height:20px;margin-bottom:1rem;}
+.gen-ok{color:var(--green)!important;}.gen-err{color:var(--red)!important;}
+#close-settings{width:100%;background:none;border:0.5px solid var(--border2);color:var(--muted);border-radius:var(--r);padding:8px;font-size:13px;font-family:var(--sans);cursor:pointer;}
+</style>
+</head>
+<body>
+<div id="loading-overlay" style="display:flex;position:fixed;inset:0;background:var(--bg);z-index:999;align-items:center;justify-content:center;flex-direction:column;gap:16px;">
+  <div style="font-family:var(--mono);font-size:15px;color:var(--green);font-weight:700;">python<span style="color:var(--muted);font-weight:400;">.öğren()</span></div>
+  <div style="font-size:13px;color:var(--muted);font-family:var(--sans);">Sorular yükleniyor...</div>
+  <div style="width:120px;height:2px;background:var(--surface2);border-radius:2px;overflow:hidden;">
+    <div style="width:40%;height:2px;background:var(--green);border-radius:2px;animation:loadSlide 1s ease-in-out infinite alternate;"></div>
+  </div>
+  <style>@keyframes loadSlide{from{transform:translateX(0)}to{transform:translateX(200%)}}</style>
+</div>
+<div id="topbar">
+  <div class="logo">python<span>.öğren()</span></div>
+  <button id="settings-btn" onclick="openSettings()">⚙ Ayarlar</button>
+</div>
+<div id="main">
+  <div id="progress-wrap">
+    <div id="progress-meta">
+      <span id="prog-label">Soru 1 / 50</span>
+      <span id="prog-score">Puan: 0</span>
+    </div>
+    <div id="progress-bar-bg"><div id="progress-bar" style="width:0%"></div></div>
+  </div>
+
+  <!-- WELCOME SPLASH -->
+  <div id="welcome" style="text-align:center;padding:3rem 1rem;">
+    <h1 style="font-size:28px;font-weight:600;color:var(--text);margin-bottom:0.75rem;">Python'u Klavyenle Öğren</h1>
+    <p style="font-size:15px;color:var(--muted);margin-bottom:2rem;line-height:1.7;">Kod boşluklarını <strong style="color:var(--text)">harf harf yazarak</strong> doldur.<br>Yanlış tuşa basmadan ilerleyemezsin!</p>
+    <button id="start-btn" onclick="showTopicSelect()" style="background:var(--green-dim);border:1px solid var(--green);color:var(--green);border-radius:var(--r-lg);padding:12px 40px;font-size:15px;font-family:var(--sans);font-weight:600;cursor:pointer;">Konuları Gör →</button>
+  </div>
+
+  <!-- TOPIC SELECT -->
+  <div id="topic-select" style="display:none;padding:0.5rem 0 2rem;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;flex-wrap:wrap;gap:8px;">
+      <div>
+        <div style="font-size:18px;font-weight:600;color:var(--text);">Konu Seç</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:3px;">Her konu 100 puan · Genel puan = tamamlanan konuların ortalaması</div>
+      </div>
+      <div id="overall-score-wrap" style="background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:10px 20px;text-align:center;">
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:2px;">GENEL PUAN</div>
+        <div id="overall-score" style="font-size:26px;font-weight:700;font-family:var(--mono);color:var(--green);">—</div>
+      </div>
+    </div>
+    <div id="topic-cards-grid" style="display:grid;grid-template-columns:repeat(2,1fr);gap:12px;"></div>
+    <div style="margin-top:1rem;text-align:center;">
+      <button onclick="resetAllScores()" style="background:none;border:0.5px solid var(--border2);color:var(--muted);border-radius:var(--r);padding:7px 18px;font-size:12px;font-family:var(--sans);cursor:pointer;">↺ Tüm Puanları Sıfırla</button>
+    </div>
+  </div>
+
+  <div id="explain-card">
+    <div id="explain-icon"></div>
+    <div id="explain-title"></div>
+    <div id="explain-body"></div>
+    <div id="explain-examples"></div>
+    <div id="explain-footer">
+      <div id="explain-counter"></div>
+      <button id="explain-next" onclick="startQuestion()">Anladım, Devam →</button>
+    </div>
+  </div>
+
+  <div id="question-card">
+    <div id="timer-row">
+      <div id="timer-ring-wrap">
+        <svg viewBox="0 0 44 44" width="44" height="44">
+          <circle cx="22" cy="22" r="18" id="timer-ring-bg"/>
+          <circle cx="22" cy="22" r="18" id="timer-ring-fg" stroke-dasharray="113.1" stroke-dashoffset="0" stroke="var(--green)"/>
+        </svg>
+        <div id="timer-num">45</div>
+      </div>
+      <div id="q-label"></div>
+      <div id="score-disp">Puan: <span id="score-val">0</span></div>
+    </div>
+    <div id="q-setup"></div>
+    <div id="code-wrap"></div>
+    <div id="hint-area">
+      <span style="font-size:14px;flex-shrink:0">💡</span>
+      <div id="hint-text">Bir boşluğa tıklayarak yazmaya başla.</div>
+    </div>
+    <div id="error-row">
+      <div class="err-dot" id="ed0"></div>
+      <div class="err-dot" id="ed1"></div>
+      <div class="err-dot" id="ed2"></div>
+      <span id="err-label" style="font-size:12px;color:var(--muted);font-family:var(--mono)">hata yok</span>
+    </div>
+    <div id="success-bar" class="result-bar">
+      <span id="success-msg"></span>
+      <button id="next-btn" class="bar-btn" onclick="nextQuestion()">Sonraki →</button>
+    </div>
+    <div id="timeout-bar" class="result-bar">
+      <span id="timeout-msg"></span>
+      <button id="timeout-next" class="bar-btn" onclick="nextQuestion()">Sonraki →</button>
+    </div>
+  </div>
+
+  <!-- TOPIC RESULT -->
+  <div id="result-screen" style="display:none;text-align:center;">
+    <div id="topic-result-icon" style="font-size:40px;margin-bottom:0.5rem;"></div>
+    <h2 id="topic-result-title" style="font-size:22px;font-weight:600;margin-bottom:0.25rem;"></h2>
+    <p class="result-sub" id="topic-result-sub"></p>
+    <div style="display:flex;justify-content:center;gap:16px;margin:1.25rem 0;flex-wrap:wrap;">
+      <div style="background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.25rem 2rem;min-width:120px;">
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:4px;">KONU PUANI</div>
+        <div id="topic-score-big" style="font-size:48px;font-weight:700;font-family:var(--mono);color:var(--green);line-height:1;"></div>
+        <div style="font-size:12px;color:var(--muted);font-family:var(--mono);">/ 100</div>
+      </div>
+      <div style="background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.25rem 2rem;min-width:120px;">
+        <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:4px;">GENEL ORTALAMA</div>
+        <div id="overall-score-big" style="font-size:48px;font-weight:700;font-family:var(--mono);color:var(--purple);line-height:1;"></div>
+        <div style="font-size:12px;color:var(--muted);font-family:var(--mono);">/ 100</div>
+      </div>
+    </div>
+    <div id="result-msg" style="font-size:14px;color:var(--muted);margin-bottom:1.5rem;line-height:1.7;background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.25rem;text-align:left;"></div>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button onclick="replayTopic()" style="background:var(--blue-dim);border:0.5px solid var(--blue);color:var(--blue);border-radius:var(--r-lg);padding:10px 22px;font-size:14px;font-family:var(--sans);cursor:pointer;">↺ Tekrar Çöz</button>
+      <button id="restart-btn" onclick="showTopicSelect()" style="background:var(--surface);border:0.5px solid var(--border2);color:var(--text);border-radius:var(--r-lg);padding:10px 22px;font-size:14px;font-family:var(--sans);cursor:pointer;">← Konulara Dön</button>
+    </div>
+  </div>
+</div>
+
+<div id="settings-modal">
+  <div id="settings-box">
+    <h3>⚙ Ayarlar</h3>
+    <label>Anthropic API Anahtarı (opsiyonel — yapay zeka ile ek sorular üret)</label>
+    <input id="api-key-input" type="password" placeholder="sk-ant-...">
+    <div class="settings-row">
+      <button class="s-btn primary" onclick="generateQuestions()">🤖 Yeni Sorular Üret</button>
+      <button class="s-btn" onclick="saveKey()">Kaydet</button>
+    </div>
+    <div id="gen-status"></div>
+    <button class="s-btn" style="width:100%;margin-bottom:8px" onclick="closeSettings();openAdmin()">🛠 Admin Paneli</button>
+    <button id="close-settings" onclick="closeSettings()">Kapat</button>
+  </div>
+</div>
+
+<!-- ══ ADMIN MODAL ══════════════════════════════════════ -->
+<div id="admin-modal" style="display:none;position:fixed;inset:0;background:rgba(14,16,22,0.97);z-index:200;overflow-y:auto;padding:1rem;">
+<div style="max-width:860px;margin:0 auto;">
+
+  <!-- Admin topbar -->
+  <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 0 1.25rem;border-bottom:0.5px solid var(--border2);margin-bottom:1.5rem;">
+    <div>
+      <div style="font-family:var(--mono);font-size:15px;color:var(--amber);font-weight:700;">🛠 Admin Paneli</div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px;">Sorular localStorage'a kaydedilir · Sayfa kapansa da kalır</div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="adminExport()" style="background:var(--surface2);border:0.5px solid var(--border2);color:var(--muted);border-radius:var(--r);padding:6px 14px;font-size:12px;font-family:var(--sans);cursor:pointer;">↓ JSON İndir</button>
+      <button onclick="document.getElementById('import-file').click()" style="background:var(--surface2);border:0.5px solid var(--border2);color:var(--muted);border-radius:var(--r);padding:6px 14px;font-size:12px;font-family:var(--sans);cursor:pointer;">↑ JSON Yükle</button>
+      <input id="import-file" type="file" accept=".json" style="display:none" onchange="adminImport(this)">
+      <button onclick="changeAdminPass()" style="background:var(--surface2);border:0.5px solid var(--border2);color:var(--muted);border-radius:var(--r);padding:6px 14px;font-size:12px;font-family:var(--sans);cursor:pointer;">🔑 Şifre Değiştir</button>
+      <button onclick="closeAdmin()" style="background:none;border:0.5px solid var(--border2);color:var(--muted);border-radius:var(--r);padding:6px 14px;font-size:12px;font-family:var(--sans);cursor:pointer;">✕ Kapat</button>
+    </div>
+  </div>
+
+  <!-- Format help -->
+  <div id="format-help" style="background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.25rem;margin-bottom:1.25rem;">
+    <div style="font-size:13px;font-weight:600;color:var(--amber);margin-bottom:10px;">📖 Kod Yazım Formatı</div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.8;">
+      Boşluk bırakmak istediğin yere <code style="font-family:var(--mono);background:var(--surface2);padding:1px 6px;border-radius:4px;color:var(--green);">[[cevap|ipucu metni]]</code> yaz.<br>
+      Örnek: <code style="font-family:var(--mono);background:var(--surface2);padding:1px 6px;border-radius:4px;color:var(--text);">[[if|Koşullu ifadeyi başlatan anahtar kelime]] x > 0:</code>
+    </div>
+    <div style="font-size:12px;color:var(--muted);margin-top:8px;font-family:var(--mono);">
+      Boş bırakmak istediklerini [[...]] ile işaretle · İpucu opsiyonel · Bir soruda 1-3 boşluk önerilir
+    </div>
+  </div>
+
+  <!-- Add / Edit form -->
+  <div id="admin-form" style="background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1.5rem;margin-bottom:1.25rem;">
+    <div style="font-size:14px;font-weight:600;color:var(--text);margin-bottom:1rem;" id="form-title">➕ Yeni Soru</div>
+    <input type="hidden" id="edit-idx" value="-1">
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:5px;">KONU</label>
+        <select id="form-topic" style="width:100%;background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 10px;font-size:13px;font-family:var(--sans);color:var(--text);outline:none;">
+          <option value="if">if</option>
+          <option value="ifelse">if / else</option>
+          <option value="ifelifelse">if / elif / else</option>
+          <option value="for">for döngüsü</option>
+          <option value="while">while döngüsü</option>
+          <option value="func">fonksiyonlar</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:5px;">SORU AÇIKLAMASI</label>
+        <input id="form-setup" type="text" placeholder="Örnek: İki sayıyı toplayan fonksiyon:" style="width:100%;background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--r);padding:8px 10px;font-size:13px;font-family:var(--sans);color:var(--text);outline:none;">
+      </div>
+    </div>
+
+    <label style="font-size:11px;color:var(--muted);font-family:var(--mono);display:block;margin-bottom:5px;">KOD (boşlukları [[cevap|ipucu]] ile işaretle)</label>
+    <textarea id="form-code" rows="7" placeholder="def [[def|Fonksiyon tanımlamak için anahtar kelime]] topla(a, b):&#10;    [[return|Sonucu geri döndür]] a + b&#10;&#10;print(topla(3, 7))" style="width:100%;background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--r);padding:10px 14px;font-size:13px;font-family:var(--mono);color:var(--text);outline:none;resize:vertical;line-height:1.8;"></textarea>
+
+    <div style="display:flex;gap:8px;margin-top:12px;align-items:center;">
+      <button onclick="saveAdminQuestion()" style="background:var(--green-dim);border:0.5px solid var(--green);color:var(--green);border-radius:var(--r);padding:8px 20px;font-size:13px;font-family:var(--sans);font-weight:500;cursor:pointer;" id="save-btn">✓ Kaydet</button>
+      <button onclick="previewQuestion()" style="background:var(--blue-dim);border:0.5px solid var(--blue);color:var(--blue);border-radius:var(--r);padding:8px 20px;font-size:13px;font-family:var(--sans);cursor:pointer;">👁 Önizle</button>
+      <button onclick="clearForm()" style="background:none;border:0.5px solid var(--border2);color:var(--muted);border-radius:var(--r);padding:8px 20px;font-size:13px;font-family:var(--sans);cursor:pointer;">✕ Temizle</button>
+      <div id="form-status" style="font-size:12px;font-family:var(--mono);color:var(--muted);margin-left:auto;"></div>
+    </div>
+
+    <!-- Preview -->
+    <div id="preview-area" style="display:none;margin-top:1rem;border-top:0.5px solid var(--border);padding-top:1rem;">
+      <div style="font-size:11px;color:var(--muted);font-family:var(--mono);margin-bottom:8px;">ÖNİZLEME</div>
+      <div id="preview-setup" style="font-size:14px;color:var(--muted);margin-bottom:8px;"></div>
+      <div id="preview-code" style="background:var(--surface2);border:0.5px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem;font-family:var(--mono);font-size:13px;line-height:2;white-space:pre;overflow-x:auto;"></div>
+    </div>
+  </div>
+
+  <!-- Question list -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+    <div style="font-size:14px;font-weight:600;color:var(--text);">Tüm Sorular <span id="q-count" style="font-size:12px;color:var(--muted);font-weight:400;font-family:var(--mono);"></span></div>
+    <input id="admin-search" type="text" placeholder="Ara..." onkeyup="renderAdminList()" style="background:var(--surface2);border:0.5px solid var(--border2);border-radius:var(--r);padding:6px 12px;font-size:12px;font-family:var(--sans);color:var(--text);outline:none;width:200px;">
+  </div>
+  <div id="admin-list"></div>
+
+</div>
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  TOPIC META
+// ════════════════════════════════════════════════════════
+var TOPICS = {
+  if:{
+    label:'if koşulu',pillClass:'pill-if',icon:'🔵',
+    title:'if — Sadece "Eğer" Bloğu',
+    body:'<code>if</code> bloğu yalnızca bir koşul <strong>doğru</strong> (True) olduğunda çalışır.\nKoşul yanlışsa hiçbir şey olmaz, program devam eder.\nKarşılaştırma operatörleri: <code>></code> büyük, <code><</code> küçük, <code>>=</code> büyük-eşit, <code>==</code> eşit.',
+    example:'yas = <span class="num">15</span>\n<span class="kw">if</span> yas >= <span class="num">18</span>:\n    <span class="fn">print</span>(<span class="str">"Ehliyet alabilir"</span>)\n<span class="cmt"># yas 15 olduğu için hiçbir şey yazmaz</span>'
+  },
+  ifelse:{
+    label:'if / else',pillClass:'pill-ifelse',icon:'🔀',
+    title:'if / else — İki Yönlü Karar',
+    body:'<code>if</code> koşul doğruysa çalışır, <code>else</code> koşul yanlışsa çalışır.\nHer zaman bu iki bloktan biri çalışır — biri boş kalamaz.\n<code>else</code> bloğu koşul gerektirmez, doğrudan iki nokta ile biter.',
+    example:'not_degeri = <span class="num">45</span>\n<span class="kw">if</span> not_degeri >= <span class="num">50</span>:\n    <span class="fn">print</span>(<span class="str">"Geçti"</span>)\n<span class="kw">else</span>:\n    <span class="fn">print</span>(<span class="str">"Kaldı"</span>)'
+  },
+  ifelifelse:{
+    label:'if / elif / else',pillClass:'pill-ifelifelse',icon:'🌿',
+    title:'if / elif / else — Çok Yönlü Karar',
+    body:'<code>elif</code> "else if" anlamına gelir — birden fazla koşulu sırayla kontrol eder.\nİlk doğru koşulun bloğu çalışır, diğerleri atlanır.\n<code>elif</code> istediğin kadar kullanabilirsin, <code>else</code> en sona opsiyonel olarak gelir.',
+    example:'<span class="kw">if</span> not >= <span class="num">90</span>:\n    <span class="fn">print</span>(<span class="str">"AA"</span>)\n<span class="kw">elif</span> not >= <span class="num">75</span>:\n    <span class="fn">print</span>(<span class="str">"BB"</span>)\n<span class="kw">elif</span> not >= <span class="num">60</span>:\n    <span class="fn">print</span>(<span class="str">"CC"</span>)\n<span class="kw">else</span>:\n    <span class="fn">print</span>(<span class="str">"Kaldı"</span>)'
+  },
+  for:{
+    label:'for döngüsü',pillClass:'pill-for',icon:'🔁',
+    title:'for — Sayarak Dönen Döngü',
+    body:'<code>for</code> döngüsü bir liste ya da <code>range()</code> üzerinde sırayla ilerler.\n<code>range(5)</code> → 0,1,2,3,4 değerlerini üretir (5 dahil değil).\n<code>range(1, 6)</code> → 1,2,3,4,5 üretir (başlangıç dahil, bitiş değil).\n<code>break</code> döngüyü anında durdurur. <code>continue</code> o adımı atlar.',
+    example:'<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):\n    <span class="fn">print</span>(i)  <span class="cmt"># 0 1 2 3 4</span>\n\n<span class="kw">for</span> i <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">4</span>):\n    <span class="fn">print</span>(i)  <span class="cmt"># 1 2 3</span>'
+  },
+  while:{
+    label:'while döngüsü',pillClass:'pill-while',icon:'🔄',
+    title:'while — Koşulla Dönen Döngü',
+    body:'<code>while</code> döngüsü koşul <strong>True</strong> olduğu sürece çalışmaya devam eder.\nKoşul False olunca döngü biter ve program devam eder.\n<strong>Dikkat:</strong> Sayacı artırmayı unutursan döngü bitmez (sonsuz döngü)!\n<code>break</code> ile koşul False olmadan da döngüden çıkılabilir.',
+    example:'sayac = <span class="num">0</span>\n<span class="kw">while</span> sayac < <span class="num">5</span>:\n    <span class="fn">print</span>(sayac)\n    sayac += <span class="num">1</span>  <span class="cmt"># çok önemli!</span>'
+  },
+  func:{
+    label:'fonksiyonlar',pillClass:'pill-func',icon:'⚡',
+    title:'def / return — Fonksiyonlar',
+    body:'Fonksiyonlar, tekrar tekrar kullanabileceğimiz kod bloklarıdır.\n<code>def</code> ile tanımlanır, ardından fonksiyon adı ve parantez gelir.\nParantez içine <strong>parametre</strong> (girdi) yazılır.\n<code>return</code> ile sonuç geri döndürülür. Fonksiyon çağrılınca çalışır.',
+    example:'<span class="kw">def</span> <span class="fn">selamla</span>(isim):\n    <span class="kw">return</span> <span class="str">"Merhaba, "</span> + isim\n\nsonuc = <span class="fn">selamla</span>(<span class="str">"Ali"</span>)\n<span class="fn">print</span>(sonuc)  <span class="cmt"># Merhaba, Ali</span>'
+  }
+};
+
+// ════════════════════════════════════════════════════════
+//  50 QUESTIONS — in order
+// ════════════════════════════════════════════════════════
+var BASE_Q = [
+
+// ── IF (5) ───────────────────────────────────────────────
+{topic:'if',setup:"Sayı pozitif mi kontrol eden program:",parts:[
+  {t:'text',v:'sayi = '},{t:'text',v:'7',c:'num'},{t:'text',v:'\n'},
+  {t:'blank',v:'if',hint:'Koşullu ifadeyi <strong>başlatan</strong> anahtar kelime'},
+  {t:'text',v:' sayi > '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Pozitif"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'if',setup:"Sıcaklık 30'dan büyükse uyarı veren program:",parts:[
+  {t:'text',v:'sicaklik = '},{t:'text',v:'35',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' sicaklik '},
+  {t:'blank',v:'>',hint:'Büyüktür karşılaştırma operatörü — sağdaki sayıdan büyük mü?'},
+  {t:'text',v:' '},{t:'text',v:'30',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Çok sıcak!"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'if',setup:"Parola doğruysa hoşgeldin mesajı gösteren program:",parts:[
+  {t:'text',v:'parola = '},{t:'text',v:'"python123"',c:'str'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' parola '},
+  {t:'blank',v:'==',hint:'Eşitlik kontrolü için kullanılır — "=" atama, <strong>"=="</strong> karşılaştırma!'},
+  {t:'text',v:' '},{t:'text',v:'"python123"',c:'str'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Hoşgeldin!"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'if',setup:"İki koşul aynı anda doğruysa çalışan program:",parts:[
+  {t:'text',v:'yas = '},{t:'text',v:'20',c:'num'},{t:'text',v:'\nkimlik = '},{t:'text',v:'True',c:'kw'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' yas >= '},{t:'text',v:'18',c:'num'},{t:'text',v:' '},
+  {t:'blank',v:'and',hint:'Her iki koşul da doğru olmalı — Türkçesi "<strong>ve</strong>"'},
+  {t:'text',v:' kimlik '},
+  {t:'text',v:'==',c:'kw'},{t:'text',v:' '},{t:'text',v:'True',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Girebilir"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'if',setup:"En az bir koşul doğruysa mesaj gösteren program:",parts:[
+  {t:'text',v:'ogrenci = '},{t:'text',v:'True',c:'kw'},{t:'text',v:'\nyasli = '},{t:'text',v:'False',c:'kw'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' ogrenci '},
+  {t:'blank',v:'or',hint:'En az bir koşul doğru olsa yeter — Türkçesi "<strong>veya</strong>"'},
+  {t:'text',v:' yasli:\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"İndirim uygulanır"',c:'str'},{t:'text',v:')'}
+]},
+
+// ── IF-ELSE (5) ───────────────────────────────────────────
+{topic:'ifelse',setup:"Not geçer mi yoksa kalır mı? if-else ile kontrol et:",parts:[
+  {t:'text',v:'not_degeri = '},{t:'text',v:'55',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' not_degeri >= '},{t:'text',v:'50',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Geçti"',c:'str'},{t:'text',v:')\n'},
+  {t:'blank',v:'else',hint:'Koşul yanlış olduğunda çalışan blok — "değilse" anlamında'},
+  {t:'text',v:':\n    '},{t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Kaldı"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelse',setup:"Çift mi tek mi? Kalan kontrolü yapan program:",parts:[
+  {t:'text',v:'sayi = '},{t:'text',v:'7',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' sayi % '},{t:'text',v:'2',c:'num'},{t:'text',v:' == '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Çift"',c:'str'},{t:'text',v:')\n'},
+  {t:'blank',v:'else',hint:'Sayı çift değilse bu blok çalışır'},
+  {t:'text',v:':\n    '},{t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Tek"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelse',setup:"Alışveriş tutarına göre kargo ücreti belirle:",parts:[
+  {t:'text',v:'tutar = '},{t:'text',v:'120',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' tutar >= '},{t:'text',v:'100',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Ücretsiz kargo"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Kargo: 25 TL"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelse',setup:"Kullanıcı adı boş değilse selamla, boşsa uyar:",parts:[
+  {t:'text',v:'kullanici = '},{t:'text',v:'"Ali"',c:'str'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' kullanici '},
+  {t:'blank',v:'!=',hint:'"eşit değildir" operatörü — boş string ile karşılaştırıyor'},
+  {t:'text',v:' '},{t:'text',v:'""',c:'str'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Merhaba, "',c:'str'},{t:'text',v:' + kullanici)\n'},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Lütfen giriş yapın"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelse',setup:"Koşulun tersi doğruysa else çalışır — not operatörünü yaz:",parts:[
+  {t:'text',v:'giris_yapildi = '},{t:'text',v:'False',c:'kw'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' '},
+  {t:'blank',v:'not',hint:'Koşulun tersini alır — False\'u True yapar, True\'yu False yapar'},
+  {t:'text',v:' giris_yapildi:\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Giriş gerekli"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Hoşgeldin"',c:'str'},{t:'text',v:')'}
+]},
+
+// ── IF-ELIF-ELSE (5) ──────────────────────────────────────
+{topic:'ifelifelse',setup:"Hava durumuna göre öneri sunan program — elif'i yaz:",parts:[
+  {t:'text',v:'sicaklik = '},{t:'text',v:'22',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' sicaklik > '},{t:'text',v:'30',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Çok sıcak"',c:'str'},{t:'text',v:')\n'},
+  {t:'blank',v:'elif',hint:'if ve else arasında — "eğer değilse ama" anlamında'},
+  {t:'text',v:' sicaklik > '},{t:'text',v:'15',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"İdeal hava"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Soğuk"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelifelse',setup:"Harf notu sistemini if-elif-else ile kur:",parts:[
+  {t:'text',v:'puan = '},{t:'text',v:'78',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' puan >= '},{t:'text',v:'90',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"AA"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'elif',c:'kw'},{t:'text',v:' puan >= '},{t:'text',v:'75',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"BB"',c:'str'},{t:'text',v:')\n'},
+  {t:'blank',v:'elif',hint:'İkinci koşul da yanlışsa bir <strong>üçüncü koşul</strong> daha kontrol edebilirsin'},
+  {t:'text',v:' puan >= '},{t:'text',v:'60',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"CC"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Kaldı"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelifelse',setup:"BMI değerine göre kategori belirle — son bloğu yaz:",parts:[
+  {t:'text',v:'bmi = '},{t:'text',v:'22',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' bmi < '},{t:'text',v:'18',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Zayıf"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'elif',c:'kw'},{t:'text',v:' bmi < '},{t:'text',v:'25',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Normal"',c:'str'},{t:'text',v:')\n'},
+  {t:'blank',v:'else',hint:'Hiçbir if/elif koşulu doğru olmadığında çalışır — koşul gerektirmez'},
+  {t:'text',v:':\n    '},{t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Fazla kilolu"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelifelse',setup:"Trafik ışığı renk kontrolü — elif zincirini tamamla:",parts:[
+  {t:'text',v:'renk = '},{t:'text',v:'"sarı"',c:'str'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' renk == '},{t:'text',v:'"kırmızı"',c:'str'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Dur"',c:'str'},{t:'text',v:')\n'},
+  {t:'blank',v:'elif',hint:'Renk kırmızı değilse sarı mı diye bakar — elif kullan'},
+  {t:'text',v:' renk == '},{t:'text',v:'"sarı"',c:'str'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Dikkat"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Geç"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'ifelifelse',setup:"Vücut kitle indeksi — ikinci elif'i yaz:",parts:[
+  {t:'text',v:'puan = '},{t:'text',v:'65',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' puan == '},{t:'text',v:'100',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Tam puan!"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'elif',c:'kw'},{t:'text',v:' puan >= '},{t:'text',v:'85',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Çok iyi"',c:'str'},{t:'text',v:')\n'},
+  {t:'blank',v:'elif',hint:'Üçüncü seçenek de bir if-elif zinciriyle eklenebilir'},
+  {t:'text',v:' puan >= '},{t:'text',v:'50',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Orta"',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Düşük"',c:'str'},{t:'text',v:')'}
+]},
+
+// ── FOR (5) ───────────────────────────────────────────────
+{topic:'for',setup:"0'dan 4'e kadar sayıları yazdıran döngü — for yaz:",parts:[
+  {t:'blank',v:'for',hint:'Bir aralıkta <strong>sırayla</strong> dönen döngü anahtar kelimesi'},
+  {t:'text',v:' i '},{t:'text',v:'in',c:'kw'},{t:'text',v:' '},{t:'text',v:'range',c:'fn'},
+  {t:'text',v:'('},{t:'text',v:'5',c:'num'},{t:'text',v:'):\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(i)  '},{t:'text',v:'# 0 1 2 3 4',c:'cmt'}
+]},
+{topic:'for',setup:"1'den 6'ya kadar sayıların toplamını hesapla:",parts:[
+  {t:'text',v:'toplam = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' sayi '},{t:'text',v:'in',c:'kw'},{t:'text',v:' '},
+  {t:'blank',v:'range',hint:'Sayı aralığı üreten fonksiyon — range(1,6) → 1,2,3,4,5'},
+  {t:'text',v:'('},{t:'text',v:'1',c:'num'},{t:'text',v:', '},{t:'text',v:'6',c:'num'},{t:'text',v:'):\n    '},
+  {t:'text',v:'toplam += sayi\n'},{t:'text',v:'print',c:'fn'},{t:'text',v:'(toplam)  '},{t:'text',v:'# 15',c:'cmt'}
+]},
+{topic:'for',setup:"Bir listedeki meyveleri tek tek yazdır:",parts:[
+  {t:'text',v:'meyveler = ['},{t:'text',v:'"elma"',c:'str'},{t:'text',v:', '},{t:'text',v:'"armut"',c:'str'},{t:'text',v:', '},{t:'text',v:'"kiraz"',c:'str'},{t:'text',v:']\n'},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' meyve '},
+  {t:'blank',v:'in',hint:'Döngüde "içinde" anlamına gelir — listenin her elemanı için'},
+  {t:'text',v:' meyveler:\n    '},{t:'text',v:'print',c:'fn'},{t:'text',v:'(meyve)'}
+]},
+{topic:'for',setup:"5'e ulaşınca döngüyü durduran program — break yaz:",parts:[
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' i '},{t:'text',v:'in',c:'kw'},{t:'text',v:' '},{t:'text',v:'range',c:'fn'},
+  {t:'text',v:'('},{t:'text',v:'10',c:'num'},{t:'text',v:'):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' i == '},{t:'text',v:'5',c:'num'},{t:'text',v:':\n        '},
+  {t:'blank',v:'break',hint:'Döngüyü <strong>anında durdurur</strong> ve döngüden çıkar'},
+  {t:'text',v:'\n    '},{t:'text',v:'print',c:'fn'},{t:'text',v:'(i)  '},{t:'text',v:'# 0 1 2 3 4',c:'cmt'}
+]},
+{topic:'for',setup:"3'ü atlayarak diğer sayıları yazdır — continue yaz:",parts:[
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' i '},{t:'text',v:'in',c:'kw'},{t:'text',v:' '},{t:'text',v:'range',c:'fn'},
+  {t:'text',v:'('},{t:'text',v:'6',c:'num'},{t:'text',v:'):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' i == '},{t:'text',v:'3',c:'num'},{t:'text',v:':\n        '},
+  {t:'blank',v:'continue',hint:'O adımı <strong>atlar</strong> ve döngünün başına döner — döngüyü bitirmez'},
+  {t:'text',v:'\n    '},{t:'text',v:'print',c:'fn'},{t:'text',v:'(i)  '},{t:'text',v:'# 0 1 2 4 5',c:'cmt'}
+]},
+
+// ── WHILE (10) ────────────────────────────────────────────
+{topic:'while',setup:"0'dan 4'e kadar sayan while döngüsü — while yaz:",parts:[
+  {t:'text',v:'sayac = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\n'},
+  {t:'blank',v:'while',hint:'Koşul doğru olduğu <strong>sürece</strong> döner — Türkçesi "iken"'},
+  {t:'text',v:' sayac < '},{t:'text',v:'5',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(sayac)\n    sayac += '},{t:'text',v:'1',c:'num'}
+]},
+{topic:'while',setup:"Sayacı artıran += operatörünü yaz:",parts:[
+  {t:'text',v:'i = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' i < '},{t:'text',v:'3',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(i)\n    i '},
+  {t:'blank',v:'+=',hint:'i = i + 1 yerine kısa yazım — "artı eşittir" operatörü'},
+  {t:'text',v:' '},{t:'text',v:'1',c:'num'}
+]},
+{topic:'while',setup:"10'dan geriye sayan program:",parts:[
+  {t:'text',v:'sayac = '},{t:'text',v:'10',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' sayac '},
+  {t:'blank',v:'>',hint:'Büyüktür — sayac 0\'dan büyük olduğu sürece döner'},
+  {t:'text',v:' '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(sayac)\n    sayac -= '},{t:'text',v:'1',c:'num'}
+]},
+{topic:'while',setup:"Şifreyi doğru girene kadar döngü devam eder:",parts:[
+  {t:'text',v:'sifre = '},{t:'text',v:'"1234"',c:'str'},{t:'text',v:'\ngirdi = '},{t:'text',v:'""',c:'str'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' girdi '},
+  {t:'blank',v:'!=',hint:'"eşit değil" anlamında — şifre yanlış olduğu <strong>sürece</strong> döner'},
+  {t:'text',v:' sifre:\n    girdi = '},{t:'text',v:'input',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Şifre: "',c:'str'},{t:'text',v:')\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Doğru!"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'while',setup:"Sonsuz döngüden break ile çık:",parts:[
+  {t:'text',v:'sayac = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' '},{t:'text',v:'True',c:'kw'},{t:'text',v:':\n    sayac += '},{t:'text',v:'1',c:'num'},{t:'text',v:'\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' sayac == '},{t:'text',v:'5',c:'num'},{t:'text',v:':\n        '},
+  {t:'blank',v:'break',hint:'Döngüyü <strong>anında durdurur</strong> — True koşuluna rağmen çıkar'},
+  {t:'text',v:'\n'},{t:'text',v:'print',c:'fn'},{t:'text',v:'(sayac)  '},{t:'text',v:'# 5',c:'cmt'}
+]},
+{topic:'while',setup:"Tek sayıları atlayan while döngüsü:",parts:[
+  {t:'text',v:'i = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' i < '},{t:'text',v:'10',c:'num'},{t:'text',v:':\n    i += '},{t:'text',v:'1',c:'num'},{t:'text',v:'\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' i % '},{t:'text',v:'2',c:'num'},{t:'text',v:' != '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n        '},
+  {t:'blank',v:'continue',hint:'Bu adımı <strong>atla</strong> — print çalışmaz, döngü başa döner'},
+  {t:'text',v:'\n    '},{t:'text',v:'print',c:'fn'},{t:'text',v:'(i)  '},{t:'text',v:'# 2 4 6 8 10',c:'cmt'}
+]},
+{topic:'while',setup:"İki koşulun ikisi de doğruysa döngü devam eder:",parts:[
+  {t:'text',v:'a = '},{t:'text',v:'1',c:'num'},{t:'text',v:'\nb = '},{t:'text',v:'10',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' a < '},{t:'text',v:'5',c:'num'},{t:'text',v:' '},
+  {t:'blank',v:'and',hint:'Her iki koşul doğru olmalı — biri yanlış olunca döner durur'},
+  {t:'text',v:' b > '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(a, b)\n    a += '},{t:'text',v:'1',c:'num'},{t:'text',v:'\n    b -= '},{t:'text',v:'2',c:'num'}
+]},
+{topic:'while',setup:"Bir sayının basamak basamak yazdırılması:",parts:[
+  {t:'text',v:'sayi = '},{t:'text',v:'12345',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' sayi '},
+  {t:'blank',v:'>',hint:'Sayı 0\'dan büyük olduğu sürece döner — basamaklar biter mi?'},
+  {t:'text',v:' '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(sayi % '},{t:'text',v:'10',c:'num'},{t:'text',v:')\n    sayi //= '},{t:'text',v:'10',c:'num'}
+]},
+{topic:'while',setup:"Toplama while ile yap — koşulun başına while yaz:",parts:[
+  {t:'text',v:'toplam = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\ni = '},{t:'text',v:'1',c:'num'},{t:'text',v:'\n'},
+  {t:'blank',v:'while',hint:'Koşula bağlı döngü — for gibi ama koşul yazılır'},
+  {t:'text',v:' i <= '},{t:'text',v:'100',c:'num'},{t:'text',v:':\n    toplam += i\n    i += '},{t:'text',v:'1',c:'num'},{t:'text',v:'\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(toplam)  '},{t:'text',v:'# 5050',c:'cmt'}
+]},
+{topic:'while',setup:"Kullanıcı 'q' yazana kadar devam eden menü:",parts:[
+  {t:'text',v:'secim = '},{t:'text',v:'""',c:'str'},{t:'text',v:'\n'},
+  {t:'text',v:'while',c:'kw'},{t:'text',v:' secim '},
+  {t:'blank',v:'!=',hint:'"eşit değil" — seçim q olmadığı sürece döngü devam eder'},
+  {t:'text',v:' '},{t:'text',v:'"q"',c:'str'},{t:'text',v:':\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"1-Başlat  2-Dur  q-Çıkış"',c:'str'},{t:'text',v:')\n    secim = '},{t:'text',v:'input',c:'fn'},{t:'text',v:'('},{t:'text',v:'"> "',c:'str'},{t:'text',v:')'}
+]},
+
+// ── FONKSIYONLAR (20) ────────────────────────────────────
+{topic:'func',setup:"Merhaba yazdıran ilk fonksiyonun — def yaz:",parts:[
+  {t:'blank',v:'def',hint:'Fonksiyon <strong>tanımlamak</strong> için kullanılan anahtar kelime'},
+  {t:'text',v:' '},{t:'text',v:'merhaba',c:'fn'},{t:'text',v:'():\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Merhaba, dünya!"',c:'str'},{t:'text',v:')\n\n'},
+  {t:'text',v:'merhaba',c:'fn'},{t:'text',v:'()  '},{t:'text',v:'# fonksiyon çağrısı',c:'cmt'}
+]},
+{topic:'func',setup:"Sonucu geri döndüren fonksiyon — return yaz:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'kare',c:'fn'},{t:'text',v:'(x):\n    '},
+  {t:'blank',v:'return',hint:'Hesaplanan değeri fonksiyondan <strong>geri gönder</strong>'},
+  {t:'text',v:' x * x\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'kare',c:'fn'},{t:'text',v:'('},{t:'text',v:'5',c:'num'},{t:'text',v:'))  '},{t:'text',v:'# 25',c:'cmt'}
+]},
+{topic:'func',setup:"İki sayıyı toplayan fonksiyon:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'topla',c:'fn'},{t:'text',v:'(a, b):\n    '},
+  {t:'blank',v:'return',hint:'a + b sonucunu <strong>döndür</strong>'},
+  {t:'text',v:' a + b\n\nsonuc = '},{t:'text',v:'topla',c:'fn'},
+  {t:'text',v:'('},{t:'text',v:'3',c:'num'},{t:'text',v:', '},{t:'text',v:'7',c:'num'},{t:'text',v:')\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(sonuc)  '},{t:'text',v:'# 10',c:'cmt'}
+]},
+{topic:'func',setup:"İsimle selamlayan fonksiyon — parametreli:",parts:[
+  {t:'blank',v:'def',hint:'Fonksiyon tanımlamak için ilk kelime'},
+  {t:'text',v:' '},{t:'text',v:'selamla',c:'fn'},{t:'text',v:'(isim):\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Merhaba, "',c:'str'},{t:'text',v:' + isim)\n\n'},
+  {t:'text',v:'selamla',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Ayşe"',c:'str'},{t:'text',v:')'}
+]},
+{topic:'func',setup:"Büyük sayıyı bulan fonksiyon — if-return kombinasyonu:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'buyuk',c:'fn'},{t:'text',v:'(a, b):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' a > b:\n        '},
+  {t:'blank',v:'return',hint:'a büyükse a\'yı <strong>geri döndür</strong>'},
+  {t:'text',v:' a\n    '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' b\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'buyuk',c:'fn'},{t:'text',v:'('},{t:'text',v:'8',c:'num'},{t:'text',v:', '},{t:'text',v:'3',c:'num'},{t:'text',v:'))  '},{t:'text',v:'# 8',c:'cmt'}
+]},
+{topic:'func',setup:"Sayının pozitif mi negatif mi olduğunu döndüren fonksiyon:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'kontrol',c:'fn'},{t:'text',v:'(x):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' x > '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n        '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'"pozitif"',c:'str'},{t:'text',v:'\n    '},
+  {t:'blank',v:'else',hint:'Sayı 0\'dan büyük değilse bu blok çalışır'},
+  {t:'text',v:':\n        '},{t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'"negatif"',c:'str'},{t:'text',v:'\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'kontrol',c:'fn'},{t:'text',v:'(-'},{t:'text',v:'5',c:'num'},{t:'text',v:'))  '},{t:'text',v:'# negatif',c:'cmt'}
+]},
+{topic:'func',setup:"Kaç kez döneceğini sayan fonksiyon — for döngüsü ile:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'say',c:'fn'},{t:'text',v:'(n):\n    '},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' i '},
+  {t:'blank',v:'in',hint:'for döngüsünde "içinde" anlamına gelir'},
+  {t:'text',v:' '},{t:'text',v:'range',c:'fn'},{t:'text',v:'(n):\n        '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(i)\n\n'},
+  {t:'text',v:'say',c:'fn'},{t:'text',v:'('},{t:'text',v:'4',c:'num'},{t:'text',v:')  '},{t:'text',v:'# 0 1 2 3',c:'cmt'}
+]},
+{topic:'func',setup:"Faktöriyel hesaplayan fonksiyon — while ile:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'faktoriyel',c:'fn'},{t:'text',v:'(n):\n    sonuc = '},{t:'text',v:'1',c:'num'},{t:'text',v:'\n    '},
+  {t:'blank',v:'while',hint:'n 1\'den büyük olduğu sürece döner'},
+  {t:'text',v:' n > '},{t:'text',v:'1',c:'num'},{t:'text',v:':\n        sonuc *= n\n        n -= '},{t:'text',v:'1',c:'num'},{t:'text',v:'\n    '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' sonuc\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'faktoriyel',c:'fn'},{t:'text',v:'('},{t:'text',v:'5',c:'num'},{t:'text',v:'))  '},{t:'text',v:'# 120',c:'cmt'}
+]},
+{topic:'func',setup:"Stringi ters çeviren fonksiyon:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'ters_cevir',c:'fn'},{t:'text',v:'(metin):\n    sonuc = '},{t:'text',v:'""',c:'str'},{t:'text',v:'\n    '},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' harf '},{t:'text',v:'in',c:'kw'},{t:'text',v:' metin:\n        sonuc = harf + sonuc\n    '},
+  {t:'blank',v:'return',hint:'Ters çevrilmiş stringi fonksiyondan geri döndür'},
+  {t:'text',v:' sonuc\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'ters_cevir',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Python"',c:'str'},{t:'text',v:'))'}
+]},
+{topic:'func',setup:"Bir listedeki en büyük sayıyı bulan fonksiyon:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'en_buyuk',c:'fn'},{t:'text',v:'(liste):\n    buyuk = liste['},{t:'text',v:'0',c:'num'},{t:'text',v:']\n    '},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' eleman '},{t:'text',v:'in',c:'kw'},{t:'text',v:' liste:\n        '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' eleman > buyuk:\n            buyuk = eleman\n    '},
+  {t:'blank',v:'return',hint:'En büyük elemanı <strong>döndür</strong>'},
+  {t:'text',v:' buyuk\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'en_buyuk',c:'fn'},{t:'text',v:'(['},{t:'text',v:'3',c:'num'},{t:'text',v:', '},{t:'text',v:'9',c:'num'},{t:'text',v:', '},{t:'text',v:'1',c:'num'},{t:'text',v:']))  '},{t:'text',v:'# 9',c:'cmt'}
+]},
+{topic:'func',setup:"Boolean döndüren fonksiyon — asal sayı kontrolü:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'asal_mi',c:'fn'},{t:'text',v:'(n):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' n < '},{t:'text',v:'2',c:'num'},{t:'text',v:':\n        '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'False',c:'kw'},{t:'text',v:'\n    '},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' i '},{t:'text',v:'in',c:'kw'},{t:'text',v:' '},{t:'text',v:'range',c:'fn'},{t:'text',v:'('},{t:'text',v:'2',c:'num'},{t:'text',v:', n):\n        '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' n % i == '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n            '},
+  {t:'blank',v:'return',hint:'Asal değilse <strong>False döndür</strong>'},
+  {t:'text',v:' '},{t:'text',v:'False',c:'kw'},{t:'text',v:'\n    '},{t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'True',c:'kw'}
+]},
+{topic:'func',setup:"İki fonksiyon birlikte kullanılıyor — def ile tanımla:",parts:[
+  {t:'blank',v:'def',hint:'İkinci fonksiyonu da <strong>tanımlamak</strong> için aynı kelime'},
+  {t:'text',v:' '},{t:'text',v:'carp',c:'fn'},{t:'text',v:'(a, b):\n    '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' a * b\n\n'},
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'kare',c:'fn'},{t:'text',v:'(x):\n    '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'carp',c:'fn'},{t:'text',v:'(x, x)\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'kare',c:'fn'},{t:'text',v:'('},{t:'text',v:'4',c:'num'},{t:'text',v:'))  '},{t:'text',v:'# 16',c:'cmt'}
+]},
+{topic:'func',setup:"Fonksiyon çağrısı — doğru argümanı ilet:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'yuzde',c:'fn'},{t:'text',v:'(sayi, oran):\n    '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' sayi * oran / '},{t:'text',v:'100',c:'num'},{t:'text',v:'\n\nkdv = '},
+  {t:'text',v:'yuzde',c:'fn'},{t:'text',v:'('},
+  {t:'blank',v:'200',hint:'Fonksiyona verilecek ilk argüman: 200 üzerinden KDV hesapla'},
+  {t:'text',v:', '},{t:'text',v:'18',c:'num'},{t:'text',v:')\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(kdv)  '},{t:'text',v:'# 36.0',c:'cmt'}
+]},
+{topic:'func',setup:"Birden fazla değer döndüren fonksiyon:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'min_max',c:'fn'},{t:'text',v:'(a, b):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' a < b:\n        '},
+  {t:'blank',v:'return',hint:'İki değeri virgülle ayırarak döndür — tuple oluşturur'},
+  {t:'text',v:' a, b\n    '},{t:'text',v:'return',c:'kw'},{t:'text',v:' b, a\n\n'},
+  {t:'text',v:'kucuk, buyuk = '},{t:'text',v:'min_max',c:'fn'},{t:'text',v:'('},{t:'text',v:'7',c:'num'},{t:'text',v:', '},{t:'text',v:'3',c:'num'},{t:'text',v:')\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(kucuk, buyuk)  '},{t:'text',v:'# 3 7',c:'cmt'}
+]},
+{topic:'func',setup:"Fonksiyon içinde koşullu if-elif-else:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'siniflandir',c:'fn'},{t:'text',v:'(puan):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' puan >= '},{t:'text',v:'85',c:'num'},{t:'text',v:':\n        '},{t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'"Pekiyi"',c:'str'},{t:'text',v:'\n    '},
+  {t:'blank',v:'elif',hint:'Birinci koşul yanlışsa ikinci seçeneği kontrol et'},
+  {t:'text',v:' puan >= '},{t:'text',v:'70',c:'num'},{t:'text',v:':\n        '},{t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'"İyi"',c:'str'},{t:'text',v:'\n    '},
+  {t:'text',v:'else',c:'kw'},{t:'text',v:':\n        '},{t:'text',v:'return',c:'kw'},{t:'text',v:' '},{t:'text',v:'"Geçer"',c:'str'}
+]},
+{topic:'func',setup:"Fonksiyon içinde while döngüsü — sayı bulma:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'basamak_topla',c:'fn'},{t:'text',v:'(n):\n    toplam = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\n    '},
+  {t:'blank',v:'while',hint:'n sıfırdan büyük olduğu sürece döner'},
+  {t:'text',v:' n > '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n        toplam += n % '},{t:'text',v:'10',c:'num'},{t:'text',v:'\n        n //= '},{t:'text',v:'10',c:'num'},{t:'text',v:'\n    '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' toplam\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'basamak_topla',c:'fn'},{t:'text',v:'('},{t:'text',v:'123',c:'num'},{t:'text',v:'))  '},{t:'text',v:'# 6',c:'cmt'}
+]},
+{topic:'func',setup:"Listedeki çift sayıları filtreleyen fonksiyon:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'cift_sayilar',c:'fn'},{t:'text',v:'(liste):\n    sonuc = []\n    '},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' sayi '},{t:'text',v:'in',c:'kw'},{t:'text',v:' liste:\n        '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' sayi % '},{t:'text',v:'2',c:'num'},{t:'text',v:' '},
+  {t:'blank',v:'==',hint:'Sıfıra eşit mi? == eşitlik kontrolü yapar'},
+  {t:'text',v:' '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n            sonuc.append(sayi)\n    '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:' sonuc\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'cift_sayilar',c:'fn'},{t:'text',v:'(['},{t:'text',v:'1',c:'num'},{t:'text',v:','},{t:'text',v:'2',c:'num'},{t:'text',v:','},{t:'text',v:'3',c:'num'},{t:'text',v:','},{t:'text',v:'4',c:'num'},{t:'text',v:','},{t:'text',v:'5',c:'num'},{t:'text',v:']))'}
+]},
+{topic:'func',setup:"Ortalama hesaplayan fonksiyon — return ile sonuç döndür:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'ortalama',c:'fn'},{t:'text',v:'(sayilar):\n    toplam = '},{t:'text',v:'0',c:'num'},{t:'text',v:'\n    '},
+  {t:'text',v:'for',c:'kw'},{t:'text',v:' s '},{t:'text',v:'in',c:'kw'},{t:'text',v:' sayilar:\n        toplam += s\n    '},
+  {t:'blank',v:'return',hint:'Toplamı eleman sayısına böl ve <strong>geri döndür</strong>'},
+  {t:'text',v:' toplam / '},{t:'text',v:'len',c:'fn'},{t:'text',v:'(sayilar)\n\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'ortalama',c:'fn'},{t:'text',v:'(['},{t:'text',v:'10',c:'num'},{t:'text',v:','},{t:'text',v:'20',c:'num'},{t:'text',v:','},{t:'text',v:'30',c:'num'},{t:'text',v:']))  '},{t:'text',v:'# 20.0',c:'cmt'}
+]},
+{topic:'func',setup:"Fonksiyonu doğru isimle çağır:",parts:[
+  {t:'text',v:'def',c:'kw'},{t:'text',v:' '},{t:'text',v:'hesapla',c:'fn'},{t:'text',v:'(x, y):\n    '},{t:'text',v:'return',c:'kw'},{t:'text',v:' x ** y\n\n'},
+  {t:'text',v:'sonuc = '},
+  {t:'blank',v:'hesapla',hint:'Tanımladığımız fonksiyonun <strong>adı</strong> neydi?'},
+  {t:'text',v:'('},{t:'text',v:'2',c:'num'},{t:'text',v:', '},{t:'text',v:'10',c:'num'},{t:'text',v:')\n'},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(sonuc)  '},{t:'text',v:'# 1024',c:'cmt'}
+]},
+{topic:'func',setup:"Özyinelemeli (recursive) fonksiyon — def ile tanımla:",parts:[
+  {t:'blank',v:'def',hint:'Fonksiyon tanımlamak için ilk kelime — kendini çağıracak!'},
+  {t:'text',v:' '},{t:'text',v:'geri_say',c:'fn'},{t:'text',v:'(n):\n    '},
+  {t:'text',v:'if',c:'kw'},{t:'text',v:' n <= '},{t:'text',v:'0',c:'num'},{t:'text',v:':\n        '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'('},{t:'text',v:'"Bitti!"',c:'str'},{t:'text',v:')\n        '},
+  {t:'text',v:'return',c:'kw'},{t:'text',v:'\n    '},
+  {t:'text',v:'print',c:'fn'},{t:'text',v:'(n)\n    '},
+  {t:'text',v:'geri_say',c:'fn'},{t:'text',v:'(n - '},{t:'text',v:'1',c:'num'},{t:'text',v:')\n\n'},
+  {t:'text',v:'geri_say',c:'fn'},{t:'text',v:'('},{t:'text',v:'3',c:'num'},{t:'text',v:')  '},{t:'text',v:'# 3 2 1 Bitti!',c:'cmt'}
+]}
+
+]; // END BASE_Q
+
+// ════════════════════════════════════════════════════════
+//  STATE
+// ════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════
+//  TOPIC SCORES — persisted per-topic out of 100
+// ════════════════════════════════════════════════════════
+var topicScores = {if:null,ifelse:null,ifelifelse:null,for:null,while:null,func:null};
+try{var ts=localStorage.getItem('topic_scores');if(ts)topicScores=JSON.parse(ts);}catch(e){}
+function saveTopicScores(){try{localStorage.setItem('topic_scores',JSON.stringify(topicScores));}catch(e){}}
+
+function getOverallScore(){
+  var vals=Object.values(topicScores).filter(function(v){return v!==null;});
+  if(!vals.length) return null;
+  return Math.round(vals.reduce(function(a,b){return a+b;},0)/vals.length);
+}
+
+function resetAllScores(){
+  if(!confirm('Tüm konu puanları sıfırlansın mı?')) return;
+  topicScores={if:null,ifelse:null,ifelifelse:null,for:null,while:null,func:null};
+  saveTopicScores();
+  renderTopicSelect();
+}
+
+// ════════════════════════════════════════════════════════
+//  TOPIC SELECT SCREEN
+// ════════════════════════════════════════════════════════
+var TOPIC_ORDER = ['if','ifelse','ifelifelse','for','while','func'];
+var TOPIC_INFO = {
+  if:  {icon:'🔵',label:'if',desc:'Sadece if koşulu',color:'var(--blue)',border:'var(--blue)'},
+  ifelse:{icon:'🔀',label:'if / else',desc:'İki yönlü koşul',color:'var(--sky)',border:'var(--sky)'},
+  ifelifelse:{icon:'🌿',label:'if / elif / else',desc:'Çok yönlü koşul',color:'var(--teal)',border:'var(--teal)'},
+  for:{icon:'🔁',label:'for döngüsü',desc:'for ve range kullanımı',color:'var(--amber)',border:'var(--amber)'},
+  while:{icon:'🔄',label:'while döngüsü',desc:'while, break ve continue',color:'var(--pink)',border:'var(--pink)'},
+  func:{icon:'⚡',label:'fonksiyonlar',desc:'def ve return ile fonksiyon',color:'var(--purple)',border:'var(--purple)'}
+};
+
+function showTopicSelect(){
+  showScreen('topic-select');
+  renderTopicSelect();
+}
+
+function renderTopicSelect(){
+  var overall = getOverallScore();
+  var el = document.getElementById('overall-score');
+  if(el) el.textContent = overall !== null ? overall : '—';
+
+  var grid = document.getElementById('topic-cards-grid');
+  var html = '';
+  TOPIC_ORDER.forEach(function(topic){
+    var info = TOPIC_INFO[topic];
+    var qs = BASE_Q.filter(function(q){return q.topic===topic;});
+    var n = qs.length;
+    var sc = topicScores[topic];
+    var done = sc !== null;
+    var scoreHtml = done
+      ? '<div style="font-size:28px;font-weight:700;font-family:var(--mono);color:'+info.color+';">'+sc+'</div><div style="font-size:11px;color:var(--muted);font-family:var(--mono);">/ 100 puan</div>'
+      : '<div style="font-size:13px;color:var(--muted);">Henüz çözülmedi</div>';
+    var btnLabel = done ? '↺ Tekrar Çöz' : 'Başla →';
+    html += '<div style="background:var(--surface);border:0.5px solid var(--border2);border-top:3px solid '+info.border+';border-radius:var(--r-lg);padding:1.25rem;transition:background 0.15s;">'
+      + '<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;">'
+        + '<div>'
+          + '<div style="font-size:20px;margin-bottom:6px;">'+info.icon+'</div>'
+          + '<div style="font-size:15px;font-weight:600;color:'+info.color+';margin-bottom:3px;">'+info.label+'</div>'
+          + '<div style="font-size:12px;color:var(--muted);">'+n+' soru &middot; '+info.desc+'</div>'
+        + '</div>'
+        + '<div style="text-align:right;">'+scoreHtml+'</div>'
+      + '</div>'
+      + '<div style="margin-top:1rem;">'
+        + '<button onclick="playTopic(\''+topic+'\')" style="width:100%;background:'+(done?'var(--surface2)':'var(--green-dim)')+';border:0.5px solid '+(done?'var(--border2)':'var(--green)')+';color:'+(done?'var(--muted)':'var(--green)')+';border-radius:var(--r);padding:8px;font-size:13px;font-family:var(--sans);font-weight:500;cursor:pointer;">'+btnLabel+'</button>'
+      + '</div>'
+    + '</div>';
+  });
+  grid.innerHTML = html;
+}
+
+// ════════════════════════════════════════════════════════
+//  PLAY A TOPIC
+// ════════════════════════════════════════════════════════
+var S = {
+  screen:'welcome', currentTopic:null, topicQs:[], qIdx:0,
+  topicScore:0,   // raw score sum (each q out of 1.0)
+  totalErrors:0, blanks:[], activeIdx:null,
+  timerVal:45, timerInterval:null, done:false
+};
+
+function playTopic(topic){
+  S.currentTopic = topic;
+  S.topicQs = BASE_Q.filter(function(q){return q.topic===topic;});
+  S.qIdx = 0;
+  S.topicScore = 0;
+  S.screen = 'game';
+  showScreen('explain-card');
+  renderExplain(topic);
+}
+
+function replayTopic(){
+  playTopic(S.currentTopic);
+}
+
+// ════════════════════════════════════════════════════════
+//  SCREEN
+// ════════════════════════════════════════════════════════
+function showScreen(id) {
+  ['welcome','topic-select','explain-card','question-card','result-screen'].forEach(function(sid){
+    var el=document.getElementById(sid);
+    if(el) el.style.display='none';
+  });
+  document.getElementById(id).style.display='block';
+  document.getElementById('progress-wrap').style.display=
+    (id==='question-card'||id==='explain-card')?'block':'none';
+}
+
+function startGame(){showTopicSelect();}  // legacy compat
+
+function maybeExplain() {
+  // Within a topic session, no repeated explain
+  startQuestion();
+}
+
+function renderExplain(topic) {
+  var t=TOPICS[topic];
+  document.getElementById('explain-icon').textContent=t.icon;
+  document.getElementById('explain-title').textContent=t.title;
+  document.getElementById('explain-body').innerHTML=
+    t.body.split('\n').map(function(l){return '<p>'+l+'</p>';}).join('');
+  document.getElementById('explain-examples').innerHTML=t.example;
+  var n=S.topicQs.length;
+  document.getElementById('explain-counter').textContent=n+' soru · konu başına 100 puan';
+  updateProgress();
+}
+
+function startQuestion() {
+  var q=S.topicQs[S.qIdx];
+  S.blanks=[]; S.activeIdx=null; S.done=false; S.totalErrors=0;
+  showScreen('question-card');
+  updateProgress();
+
+  var t=TOPICS[q.topic];
+  document.getElementById('q-label').innerHTML=
+    '<span class="topic-pill '+t.pillClass+'">'+t.icon+' '+t.label+'</span>';
+  document.getElementById('q-setup').textContent=q.setup;
+
+  var html=''; var bi=0;
+  q.parts.forEach(function(part){
+    if(part.t==='blank'){
+      var slots=part.v.split('').map(function(_,si){
+        return '<span class="slot" data-si="'+si+'"></span>';
+      }).join('');
+      html+='<span class="blank-wrap" data-bi="'+bi+'" onclick="activateBlank('+bi+')">'+slots+'</span>';
+      S.blanks.push({answer:part.v,typed:[],completed:false,errCount:0,hint:part.hint||''});
+      bi++;
+    } else {
+      var cls=part.c?' class="code-'+part.c+'"':'';
+      html+='<span'+cls+'>'+escHtml(part.v)+'</span>';
+    }
+  });
+  document.getElementById('code-wrap').innerHTML=html;
+  document.getElementById('success-bar').classList.remove('show');
+  document.getElementById('timeout-bar').classList.remove('show');
+  document.getElementById('hint-text').innerHTML='Bir boşluğa tıklayarak yazmaya başla.';
+  updateErrDots();
+  updateScoreDisp();
+  startTimer();
+  activateBlank(0);
+}
+
+function activateBlank(bi) {
+  if(S.done) return;
+  if(S.blanks[bi].completed) return;
+  S.activeIdx=bi;
+  document.querySelectorAll('.blank-wrap').forEach(function(el,i){
+    el.classList.toggle('active',i===bi);
+    el.classList.toggle('done',S.blanks[i].completed);
+  });
+  renderSlots(bi);
+  var hint=S.blanks[bi].hint;
+  document.getElementById('hint-text').innerHTML=
+    hint?'Boşluk '+(bi+1)+': '+hint:'Boşluk '+(bi+1)+': Kodu incele ve doğru kelimeyi yaz.';
+}
+
+function renderSlots(bi) {
+  var b=S.blanks[bi];
+  var wrap=document.querySelector('.blank-wrap[data-bi="'+bi+'"]');
+  if(!wrap) return;
+  var slots=wrap.querySelectorAll('.slot');
+  slots.forEach(function(sl,si){
+    sl.className='slot';sl.textContent='';
+    if(si<b.typed.length){sl.classList.add('filled');sl.textContent=b.typed[si];}
+    else if(si===b.typed.length){sl.classList.add('cursor');}
+  });
+}
+
+// ════════════════════════════════════════════════════════
+//  KEYBOARD
+// ════════════════════════════════════════════════════════
+document.addEventListener('keydown',function(e){
+  if(S.screen!=='game'||S.done) return;
+  if(S.activeIdx===null){activateBlank(0);return;}
+  var bi=S.activeIdx;
+  var b=S.blanks[bi];
+  if(b.completed) return;
+
+  if(e.key==='Backspace'){
+    e.preventDefault();
+    if(b.typed.length>0){b.typed.pop();renderSlots(bi);}
+    return;
+  }
+  if(e.key==='Tab'){
+    e.preventDefault();
+    var nxt=-1;
+    for(var i=bi+1;i<S.blanks.length;i++){if(!S.blanks[i].completed){nxt=i;break;}}
+    if(nxt>=0) activateBlank(nxt);
+    return;
+  }
+  if(e.key.length!==1) return;
+
+  var pos=b.typed.length;
+  if(pos>=b.answer.length) return;
+  var expected=b.answer[pos];
+
+  if(e.key===expected){
+    b.typed.push(e.key);
+    renderSlots(bi);
+    if(b.typed.length===b.answer.length){
+      b.completed=true;
+      var wrap=document.querySelector('.blank-wrap[data-bi="'+bi+'"]');
+      wrap.classList.remove('active');wrap.classList.add('done');
+      var allDone=S.blanks.every(function(b2){return b2.completed;});
+      if(allDone){questionDone(true);}
+      else{
+        var nxt2=-1;
+        for(var j=0;j<S.blanks.length;j++){if(!S.blanks[j].completed){nxt2=j;break;}}
+        if(nxt2>=0) setTimeout(function(){activateBlank(nxt2);},80);
+      }
+    }
+  } else {
+    e.preventDefault();
+    b.errCount++;S.totalErrors++;
+    updateErrDots();
+    var wrap2=document.querySelector('.blank-wrap[data-bi="'+bi+'"]');
+    var slots2=wrap2.querySelectorAll('.slot');
+    var sl=slots2[pos];
+    if(sl){
+      sl.className='slot error';sl.textContent=e.key;
+      setTimeout(function(){sl.className='slot cursor';sl.textContent='';},350);
+    }
+  }
+});
+
+function questionDone(success) {
+  S.done=true;
+  clearInterval(S.timerInterval);
+  var n=S.topicQs.length;
+  var isLast=S.qIdx>=n-1;
+  if(success){
+    var timeUsed=45-S.timerVal;
+    var spd=timeUsed<10?0.3:timeUsed<20?0.2:timeUsed<30?0.1:0;
+    var pen=Math.min(S.totalErrors*0.1,0.5);
+    var qScore=Math.max(1.0-pen+spd,0);
+    S.topicScore+=qScore;
+    updateScoreDisp();
+    var ptsLabel='+'+Math.round(qScore/n*100)+'p';
+    document.getElementById('success-msg').innerHTML=
+      '✓ Mükemmel! <strong style="color:var(--green)">'+ptsLabel+'</strong>'+
+      (spd>0?' · hız bonusu':'')+(pen>0?' · hata cezası':'');
+    document.getElementById('next-btn').textContent=isLast?'Sonuçlar →':'Sonraki →';
+    document.getElementById('success-bar').classList.add('show');
+    document.getElementById('hint-text').innerHTML='Harika! Devam etmek için butona bas.';
+  } else {
+    S.blanks.forEach(function(b,bi){
+      if(!b.completed){
+        var wrap=document.querySelector('.blank-wrap[data-bi="'+bi+'"]');
+        if(!wrap) return;
+        wrap.classList.remove('active');
+        wrap.querySelectorAll('.slot').forEach(function(sl,si){
+          sl.className='slot filled';sl.style.opacity='0.5';sl.textContent=b.answer[si]||'';
+        });
+      }
+    });
+    var answers=S.topicQs[S.qIdx].parts.filter(function(p){return p.t==='blank';}).map(function(p){return p.v;}).join(', ');
+    document.getElementById('timeout-msg').innerHTML=
+      'Süre doldu! Cevap: <span style="font-family:var(--mono);color:var(--red)">'+answers+'</span>';
+    document.getElementById('timeout-next').textContent=isLast?'Sonuçlar →':'Sonraki →';
+    document.getElementById('timeout-bar').classList.add('show');
+  }
+}
+
+function nextQuestion() {
+  S.qIdx++;
+  if(S.qIdx>=S.topicQs.length){showResult();}
+  else{updateProgress();startQuestion();}
+}
+
+// ════════════════════════════════════════════════════════
+//  TIMER
+// ════════════════════════════════════════════════════════
+var CIRCUM=113.1;
+function startTimer(){
+  S.timerVal=45;clearInterval(S.timerInterval);renderTimer();
+  S.timerInterval=setInterval(function(){
+    S.timerVal--;renderTimer();
+    if(S.timerVal<=0){clearInterval(S.timerInterval);if(!S.done)questionDone(false);}
+  },1000);
+}
+function renderTimer(){
+  var v=S.timerVal;
+  document.getElementById('timer-num').textContent=v;
+  var fg=document.getElementById('timer-ring-fg');
+  fg.style.strokeDashoffset=CIRCUM*(1-v/45);
+  fg.style.stroke=v>25?'var(--green)':v>12?'var(--amber)':'var(--red)';
+}
+
+// ════════════════════════════════════════════════════════
+//  UI
+// ════════════════════════════════════════════════════════
+function updateProgress(){
+  var n=S.topicQs.length||1;
+  var curScore=Math.round((S.topicScore/n)*100);
+  document.getElementById('prog-label').textContent='Soru '+(S.qIdx+1)+' / '+n;
+  document.getElementById('prog-score').textContent='Puan: '+curScore;
+  document.getElementById('progress-bar').style.width=((S.qIdx/n)*100)+'%';
+}
+function updateScoreDisp(){
+  var n=S.topicQs.length||1;
+  var cur=Math.round((S.topicScore/n)*100);
+  var el=document.getElementById('score-val');if(el)el.textContent=cur;
+}
+function updateErrDots(){
+  [0,1,2].forEach(function(i){document.getElementById('ed'+i).classList.toggle('lit',S.totalErrors>i);});
+  document.getElementById('err-label').textContent=S.totalErrors===0?'hata yok':S.totalErrors+' hata';
+}
+
+// ════════════════════════════════════════════════════════
+//  RESULT
+// ════════════════════════════════════════════════════════
+function showResult(){
+  clearInterval(S.timerInterval);
+  var n=S.topicQs.length||1;
+  var topicPct=Math.min(Math.round((S.topicScore/n)*100),100);
+  topicScores[S.currentTopic]=topicPct;
+  saveTopicScores();
+
+  showScreen('result-screen');
+  var info=TOPIC_INFO[S.currentTopic];
+  document.getElementById('topic-result-icon').textContent=info.icon;
+  document.getElementById('topic-result-title').textContent=info.label+' tamamlandı!';
+  document.getElementById('topic-result-sub').textContent=n+' soru çözüldü';
+  document.getElementById('topic-score-big').textContent=topicPct;
+  document.getElementById('topic-score-big').style.color=topicPct>=70?'var(--green)':topicPct>=50?'var(--amber)':'var(--red)';
+
+  var overall=getOverallScore();
+  document.getElementById('overall-score-big').textContent=overall!==null?overall:'—';
+
+  document.getElementById('result-msg').innerHTML=
+    '<strong style="color:var(--text)">'+info.label+':</strong> '+
+    (topicPct>=90?'🌟 Mükemmel! Bu konuyu çok iyi öğrendin.':
+     topicPct>=70?'👍 Çok iyi! Birkaç küçük eksik var ama genel iyi.':
+     topicPct>=50?'📖 Orta. Bu konuyu tekrar çalışmanı öneririm.':
+     '💪 Daha fazla pratik gerekiyor. Açıklamayı tekrar oku ve yeniden dene.')+
+    (overall!==null?'<br><br><strong style="color:var(--text)">Genel ortalaman:</strong> '+overall+'/100 ('+Object.values(topicScores).filter(function(v){return v!==null;}).length+' konu tamamlandı)':'');
+}
+
+function restartGame(){
+  clearInterval(S.timerInterval);showTopicSelect();
+}
+
+// ════════════════════════════════════════════════════════
+//  SETTINGS & API
+// ════════════════════════════════════════════════════════
+var savedApiKey='';
+try{savedApiKey=localStorage.getItem('py_api_key')||'';}catch(e){}
+function openSettings(){
+  document.getElementById('api-key-input').value=savedApiKey;
+  document.getElementById('gen-status').textContent='';
+  document.getElementById('settings-modal').classList.add('open');
+}
+function closeSettings(){document.getElementById('settings-modal').classList.remove('open');}
+function saveKey(){
+  savedApiKey=document.getElementById('api-key-input').value.trim();
+  try{localStorage.setItem('py_api_key',savedApiKey);}catch(e){}
+  var st=document.getElementById('gen-status');
+  st.textContent=savedApiKey?'✓ Kaydedildi.':'(Temizlendi)';st.className='gen-ok';
+}
+async function generateQuestions(){
+  var key=document.getElementById('api-key-input').value.trim();
+  var st=document.getElementById('gen-status');
+  if(!key){st.textContent='⚠ Önce API anahtarını gir.';st.className='gen-err';return;}
+  st.textContent='⏳ Sorular üretiliyor...';st.className='';
+  var prompt='Sen bir Python öğretmenisin. 9. sınıf için 12 fill-in-the-blank sorusu üret: 2 if, 2 ifelse, 2 ifelifelse, 2 for, 2 while, 2 func konularında.\n\nSADECE JSON döndür:\n[{"topic":"if","setup":"açıklama","parts":[{"t":"text","v":"kod","c":"kw"},{"t":"blank","v":"cevap","hint":"ipucu"}]}]\n\ntopic değerleri: if, ifelse, ifelifelse, for, while, func\nblanks: if,elif,else,for,while,break,continue,def,return,and,or,not,in,range,+=,-=,==,!=,>,<\nc: kw(mavi),fn(mor),str(yeşil),num(turuncu),cmt(gri)\nHint Türkçe, <strong> kullanabilir, cevabı vermesin\nKod max 8 satır, 1-2 blank/soru';
+  try{
+    var res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':key,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:3000,messages:[{role:'user',content:prompt}]})
+    });
+    if(!res.ok) throw new Error('API '+res.status);
+    var data=await res.json();
+    var text=(data.content&&data.content[0]?data.content[0].text||'':'').replace(/```json\n?|```/g,'').trim();
+    var parsed=JSON.parse(text);
+    if(Array.isArray(parsed)&&parsed.length>0){
+      parsed.forEach(function(q){BASE_Q.push(q);});
+      savedApiKey=key;
+      try{localStorage.setItem('py_api_key',key);}catch(e){}
+      st.textContent='✓ '+parsed.length+' yeni soru eklendi! Toplam: '+BASE_Q.length;
+      st.className='gen-ok';
+    } else throw new Error('Geçersiz format');
+  }catch(err){st.textContent='✗ Hata: '+err.message;st.className='gen-err';}
+}
+
+// ════════════════════════════════════════════════════════
+//  UTILS
+// ════════════════════════════════════════════════════════
+function escHtml(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// ════════════════════════════════════════════════════════
+//  ADMIN — parse [[answer|hint]] format into parts array
+// ════════════════════════════════════════════════════════
+
+// Keyword color map
+var KW_COLORS = {
+  'if':'kw','elif':'kw','else':'kw','for':'kw','while':'kw','in':'kw',
+  'and':'kw','or':'kw','not':'kw','True':'kw','False':'kw','None':'kw',
+  'break':'kw','continue':'kw','pass':'kw','return':'kw','def':'kw',
+  'print':'fn','input':'fn','range':'fn','len':'fn','int':'fn','str':'fn',
+  'float':'fn','list':'fn','append':'fn','type':'fn','abs':'fn','max':'fn','min':'fn'
+};
+
+function codeTextToParts(codeStr) {
+  // Split on [[answer|hint]] tokens
+  var parts = [];
+  var regex = /\[\[([^\]|]+)(?:\|([^\]]*))?\]\]/g;
+  var lastIdx = 0;
+  var m;
+  while ((m = regex.exec(codeStr)) !== null) {
+    // Text before blank
+    if (m.index > lastIdx) {
+      var seg = codeStr.slice(lastIdx, m.index);
+      parts = parts.concat(segmentText(seg));
+    }
+    // Blank
+    parts.push({t:'blank', v:m[1], hint:m[2]||''});
+    lastIdx = m.index + m[0].length;
+  }
+  // Remaining text
+  if (lastIdx < codeStr.length) {
+    parts = parts.concat(segmentText(codeStr.slice(lastIdx)));
+  }
+  return parts;
+}
+
+function segmentText(str) {
+  // Break text into colored tokens by scanning for keywords/strings/numbers/comments
+  var parts = [];
+  var i = 0;
+  while (i < str.length) {
+    // Comment to end of line
+    if (str[i] === '#') {
+      var end = str.indexOf('\n', i);
+      var cmtEnd = end === -1 ? str.length : end;
+      parts.push({t:'text', v:str.slice(i, cmtEnd), c:'cmt'});
+      i = cmtEnd;
+      continue;
+    }
+    // String literals
+    if (str[i] === '"' || str[i] === "'") {
+      var q = str[i];
+      var j = i + 1;
+      while (j < str.length && str[j] !== q) {
+        if (str[j] === '\\') j++;
+        j++;
+      }
+      j++;
+      parts.push({t:'text', v:str.slice(i, j), c:'str'});
+      i = j;
+      continue;
+    }
+    // Numbers
+    if (/[0-9]/.test(str[i]) && (i === 0 || /\W/.test(str[i-1]))) {
+      var k = i;
+      while (k < str.length && /[0-9.]/.test(str[k])) k++;
+      parts.push({t:'text', v:str.slice(i, k), c:'num'});
+      i = k;
+      continue;
+    }
+    // Identifiers / keywords
+    if (/[a-zA-Z_]/.test(str[i])) {
+      var l = i;
+      while (l < str.length && /[a-zA-Z0-9_]/.test(str[l])) l++;
+      var word = str.slice(i, l);
+      var col = KW_COLORS[word] || null;
+      // Check if next non-space is '(' -> function
+      var rest = str.slice(l).trimStart();
+      if (rest[0] === '(' && !KW_COLORS[word]) col = 'fn';
+      parts.push({t:'text', v:word, c:col});
+      i = l;
+      continue;
+    }
+    // Regular char — group consecutive non-special chars
+    var plain = i;
+    while (plain < str.length && !/[a-zA-Z0-9_"'#]/.test(str[plain])) plain++;
+    if (plain === i) plain = i + 1;
+    parts.push({t:'text', v:str.slice(i, plain)});
+    i = plain;
+  }
+  return parts;
+}
+
+function partsToCodeStr(parts) {
+  return parts.map(function(p) {
+    if (p.t === 'blank') {
+      return '[[' + p.v + (p.hint ? '|' + p.hint : '') + ']]';
+    }
+    return p.v;
+  }).join('');
+}
+
+// ── Admin State ────────────────────────────────────────
+var ADMIN_Q = []; // working copy, always synced to localStorage
+
+// ════════════════════════════════════════════════════════
+//  SUPABASE CONFIG
+// ════════════════════════════════════════════════════════
+var SB_URL = 'https://owkwgylgbtndpywxocha.supabase.co';
+var SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im93a3dneWxnYnRuZHB5d3hvY2hhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU2NDEwNjEsImV4cCI6MjA5MTIxNzA2MX0.eFa9hwISjGyZtBiLM3NgsZL-PmedJxVC_uD3bHVwcV8';
+var SB_HEADERS = {
+  'Content-Type': 'application/json',
+  'apikey': SB_KEY,
+  'Authorization': 'Bearer ' + SB_KEY,
+  'Prefer': 'return=representation'
+};
+
+function sbUrl(path) { return SB_URL + '/rest/v1/' + path; }
+
+// ── Supabase helpers ────────────────────────────────────
+async function sbFetch(path, opts) {
+  opts = opts || {};
+  opts.headers = Object.assign({}, SB_HEADERS, opts.headers || {});
+  var res = await fetch(sbUrl(path), opts);
+  if (!res.ok) {
+    var err = await res.text();
+    throw new Error('Supabase ' + res.status + ': ' + err.slice(0,120));
+  }
+  var text = await res.text();
+  return text ? JSON.parse(text) : [];
+}
+
+// ── Load questions from Supabase ────────────────────────
+async function loadAdminQ() {
+  try {
+    var rows = await sbFetch('questions?select=*&order=order_index.asc,created_at.asc');
+    if (rows.length === 0) {
+      // First run: seed with BASE_Q
+      await seedSupabase();
+      rows = await sbFetch('questions?select=*&order=order_index.asc,created_at.asc');
+    }
+    ADMIN_Q = rows.map(function(r, i) {
+      return { _id: r.id, topic: r.topic, setup: r.setup, parts: r.parts, order_index: r.order_index !== undefined ? r.order_index : i };
+    });
+    syncToGame();
+  } catch(e) {
+    console.warn('Supabase yüklenemedi, yerel sorular kullanılıyor:', e.message);
+    ADMIN_Q = BASE_Q.slice();
+    syncToGame();
+  }
+}
+
+async function seedSupabase() {
+  var batch = BASE_Q.map(function(q, i) {
+    return { topic: q.topic, setup: q.setup, parts: q.parts, order_index: i };
+  });
+  // Insert in chunks of 20
+  for (var i = 0; i < batch.length; i += 20) {
+    await sbFetch('questions', { method: 'POST', body: JSON.stringify(batch.slice(i, i+20)) });
+  }
+}
+
+function syncToGame() {
+  BASE_Q.length = 0;
+  ADMIN_Q.forEach(function(q){ BASE_Q.push(q); });
+}
+
+// ── Admin Open/Close ──────────────────────────────────
+var ADMIN_PASS = 'ogretmen2025';
+
+async function openAdmin() {
+  var stored = sessionStorage.getItem('admin_auth');
+  if (stored !== ADMIN_PASS) {
+    var input = prompt('🔒 Admin şifresi:');
+    if (input !== ADMIN_PASS) { alert('❌ Yanlış şifre.'); return; }
+    sessionStorage.setItem('admin_auth', ADMIN_PASS);
+  }
+  document.getElementById('admin-modal').style.display = 'block';
+  document.getElementById('admin-list').innerHTML = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:14px;">⏳ Yükleniyor...</div>';
+  await loadAdminQ();
+  renderAdminList();
+  clearForm();
+}
+function closeAdmin() {
+  document.getElementById('admin-modal').style.display = 'none';
+}
+
+// ── Render Question List ───────────────────────────────
+var TOPIC_LABELS = {
+  if:'if', ifelse:'if / else', ifelifelse:'if / elif / else',
+  for:'for', while:'while', func:'fonksiyon'
+};
+var TOPIC_COLORS_ADMIN = {
+  if:'var(--blue)', ifelse:'var(--sky)', ifelifelse:'var(--teal)',
+  for:'var(--amber)', while:'var(--pink)', func:'var(--purple)'
+};
+
+function renderAdminList() {
+  var search = (document.getElementById('admin-search').value || '').toLowerCase();
+  var list = document.getElementById('admin-list');
+  var count = 0;
+  var html = '';
+  ADMIN_Q.forEach(function(q, idx) {
+    var label = TOPIC_LABELS[q.topic] || q.topic;
+    var color = TOPIC_COLORS_ADMIN[q.topic] || 'var(--muted)';
+    var setup = q.setup || '';
+    var codePreview = partsToCodeStr(q.parts || []).replace(/\[\[([^|]+)(?:\|[^\]]+)?\]\]/g,'[$1]').slice(0,60);
+    if (search && setup.toLowerCase().indexOf(search) < 0 && codePreview.toLowerCase().indexOf(search) < 0) return;
+    count++;
+    html += '<div style="background:var(--surface);border:0.5px solid var(--border2);border-radius:var(--r-lg);padding:1rem 1.25rem;margin-bottom:8px;display:flex;align-items:center;gap:12px;">' +
+      '<div style="width:4px;height:40px;border-radius:2px;background:'+color+';flex-shrink:0;"></div>' +
+      '<div style="flex:1;min-width:0;">' +
+        '<div style="font-size:11px;color:'+color+';font-family:var(--mono);font-weight:600;margin-bottom:3px;">'+label+'</div>' +
+        '<div style="font-size:13px;color:var(--text);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+escHtml(setup)+'</div>' +
+        '<div style="font-size:11px;color:var(--muted);font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">'+escHtml(codePreview)+(codePreview.length>=60?'…':'')+'</div>' +
+      '</div>' +
+      '<div style="display:flex;gap:6px;flex-shrink:0;">' +
+        '<button onclick="moveQ('+idx+',-1)" title="Yukarı" style="'+iconBtn()+'">↑</button>' +
+        '<button onclick="moveQ('+idx+',1)" title="Aşağı" style="'+iconBtn()+'">↓</button>' +
+        '<button onclick="editQ('+idx+')" style="'+iconBtn('var(--blue-dim)','var(--blue)')+'">Düzenle</button>' +
+        '<button onclick="deleteQ('+idx+')" style="'+iconBtn('var(--red-dim)','var(--red)')+'">Sil</button>' +
+      '</div>' +
+    '</div>';
+  });
+  if (!html) html = '<div style="text-align:center;padding:2rem;color:var(--muted);font-size:14px;">Soru bulunamadı.</div>';
+  list.innerHTML = html;
+  document.getElementById('q-count').textContent = '('+ADMIN_Q.length+' soru)';
+}
+
+function iconBtn(bg, col) {
+  bg = bg || 'var(--surface2)'; col = col || 'var(--muted)';
+  return 'background:'+bg+';border:0.5px solid '+col+';border-radius:var(--r);padding:5px 10px;font-size:11px;font-family:var(--sans);color:'+col+';cursor:pointer;white-space:nowrap;';
+}
+
+// ── CRUD ───────────────────────────────────────────────
+function editQ(idx) {
+  var q = ADMIN_Q[idx];
+  document.getElementById('edit-idx').value = idx;
+  document.getElementById('form-topic').value = q.topic;
+  document.getElementById('form-setup').value = q.setup;
+  document.getElementById('form-code').value = partsToCodeStr(q.parts || []);
+  document.getElementById('form-title').textContent = '✏️ Soru Düzenle (#' + (idx+1) + ')';
+  document.getElementById('save-btn').textContent = '✓ Güncelle';
+  document.getElementById('form-status').textContent = '';
+  document.getElementById('preview-area').style.display = 'none';
+  document.getElementById('admin-form').scrollIntoView({behavior:'smooth'});
+}
+
+async function deleteQ(idx) {
+  if (!confirm('Bu soruyu silmek istediğine emin misin?')) return;
+  var q = ADMIN_Q[idx];
+  var st = document.getElementById('form-status');
+  try {
+    if (q._id) await sbFetch('questions?id=eq.' + q._id, { method: 'DELETE', headers: {'Prefer':''} });
+    ADMIN_Q.splice(idx, 1);
+    syncToGame();
+    renderAdminList();
+  } catch(e) { alert('Sil hatası: ' + e.message); }
+}
+
+async function moveQ(idx, dir) {
+  var newIdx = idx + dir;
+  if (newIdx < 0 || newIdx >= ADMIN_Q.length) return;
+  var a = ADMIN_Q[idx], b = ADMIN_Q[newIdx];
+  var oi_a = a.order_index !== undefined ? a.order_index : idx;
+  var oi_b = b.order_index !== undefined ? b.order_index : newIdx;
+  // Swap order_index values
+  try {
+    if (a._id) await sbFetch('questions?id=eq.' + a._id, { method: 'PATCH', body: JSON.stringify({order_index: oi_b}) });
+    if (b._id) await sbFetch('questions?id=eq.' + b._id, { method: 'PATCH', body: JSON.stringify({order_index: oi_a}) });
+  } catch(e) { console.warn('Sıra güncellenemedi:', e.message); }
+  a.order_index = oi_b; b.order_index = oi_a;
+  ADMIN_Q[idx] = b; ADMIN_Q[newIdx] = a;
+  syncToGame();
+  renderAdminList();
+}
+
+async function saveAdminQuestion() {
+  var topic = document.getElementById('form-topic').value;
+  var setup = document.getElementById('form-setup').value.trim();
+  var code  = document.getElementById('form-code').value;
+  var st = document.getElementById('form-status');
+
+  if (!setup) { st.textContent = '⚠ Açıklama boş olamaz'; st.style.color='var(--red)'; return; }
+  if (!code.trim()) { st.textContent = '⚠ Kod boş olamaz'; st.style.color='var(--red)'; return; }
+  if (code.indexOf('[[') < 0) { st.textContent = '⚠ En az bir [[boşluk]] ekle'; st.style.color='var(--red)'; return; }
+
+  var parts = codeTextToParts(code);
+  var editIdx = parseInt(document.getElementById('edit-idx').value);
+  st.textContent = '⏳ Kaydediliyor...'; st.style.color = 'var(--muted)';
+
+  try {
+    if (editIdx >= 0) {
+      var existing = ADMIN_Q[editIdx];
+      var payload = { topic:topic, setup:setup, parts:parts };
+      if (existing._id) {
+        var rows = await sbFetch('questions?id=eq.' + existing._id, { method: 'PATCH', body: JSON.stringify(payload) });
+        ADMIN_Q[editIdx] = Object.assign({}, existing, payload, { _id: existing._id });
+      } else {
+        ADMIN_Q[editIdx] = Object.assign({}, existing, payload);
+      }
+      st.textContent = '✓ Güncellendi!';
+    } else {
+      var newOrder = ADMIN_Q.length;
+      var rows = await sbFetch('questions', { method: 'POST', body: JSON.stringify({topic:topic, setup:setup, parts:parts, order_index:newOrder}) });
+      var newId = rows && rows[0] ? rows[0].id : null;
+      ADMIN_Q.push({ _id: newId, topic:topic, setup:setup, parts:parts, order_index:newOrder });
+      st.textContent = '✓ Eklendi!';
+    }
+    st.style.color = 'var(--green)';
+    syncToGame();
+    renderAdminList();
+    clearForm();
+  } catch(e) {
+    st.textContent = '✗ Hata: ' + e.message;
+    st.style.color = 'var(--red)';
+  }
+}
+
+function clearForm() {
+  document.getElementById('edit-idx').value = '-1';
+  document.getElementById('form-topic').value = 'if';
+  document.getElementById('form-setup').value = '';
+  document.getElementById('form-code').value = '';
+  document.getElementById('form-title').textContent = '➕ Yeni Soru';
+  document.getElementById('save-btn').textContent = '✓ Kaydet';
+  document.getElementById('form-status').textContent = '';
+  document.getElementById('preview-area').style.display = 'none';
+}
+
+function previewQuestion() {
+  var setup = document.getElementById('form-setup').value.trim();
+  var code  = document.getElementById('form-code').value;
+  if (!code.trim()) return;
+
+  var parts = codeTextToParts(code);
+  var html = '';
+  var bi = 0;
+  parts.forEach(function(part) {
+    if (part.t === 'blank') {
+      var slots = part.v.split('').map(function(ch){ return '<span style="display:inline-block;width:10px;text-align:center;color:var(--blue);">_</span>'; }).join('');
+      html += '<span style="display:inline;background:var(--blue-dim);border:1px solid var(--blue);border-radius:4px;padding:0 3px;font-family:var(--mono);">'+escHtml(part.v)+'</span>';
+      bi++;
+    } else {
+      var cls = part.c ? 'code-'+part.c : '';
+      html += '<span'+(cls?' class="'+cls+'"':'')+'>' + escHtml(part.v) + '</span>';
+    }
+  });
+
+  document.getElementById('preview-setup').textContent = setup || '(açıklama yok)';
+  document.getElementById('preview-code').innerHTML = html;
+  document.getElementById('preview-area').style.display = 'block';
+}
+
+// ── Import / Export ────────────────────────────────────
+function adminExport() {
+  var exportData = ADMIN_Q.map(function(q){
+    return { topic: q.topic, setup: q.setup, parts: q.parts };
+  });
+  var json = JSON.stringify(exportData, null, 2);
+  var blob = new Blob([json], {type:'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'python-sorular.json';
+  a.click();
+}
+
+async function adminImport(input) {
+  var file = input.files[0];
+  if (!file) return;
+  var reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      var parsed = JSON.parse(e.target.result);
+      if (!Array.isArray(parsed) || !parsed.length) { alert('Geçersiz dosya.'); return; }
+      if (!confirm(ADMIN_Q.length + ' soru silinip ' + parsed.length + ' soru yüklenecek. Devam?')) return;
+      // Delete all existing
+      await sbFetch('questions?id=neq.00000000-0000-0000-0000-000000000000', { method: 'DELETE', headers: {'Prefer':''} });
+      // Insert new
+      var batch = parsed.map(function(q,i){ return {topic:q.topic,setup:q.setup,parts:q.parts,order_index:i}; });
+      for (var i=0; i<batch.length; i+=20) {
+        await sbFetch('questions', { method: 'POST', body: JSON.stringify(batch.slice(i,i+20)) });
+      }
+      await loadAdminQ();
+      renderAdminList();
+      alert('✓ ' + parsed.length + ' soru yüklendi!');
+    } catch(err) { alert('Hata: ' + err.message); }
+  };
+  reader.readAsText(file);
+  input.value = '';
+}
+
+function changeAdminPass() {
+  var curr = prompt('Mevcut şifre:');
+  if (curr !== ADMIN_PASS) { alert('❌ Yanlış şifre.'); return; }
+  var n1 = prompt('Yeni şifre:');
+  if (!n1 || n1.trim().length < 4) { alert('⚠ Şifre en az 4 karakter olmalı.'); return; }
+  var n2 = prompt('Yeni şifre (tekrar):');
+  if (n1 !== n2) { alert('⚠ Şifreler eşleşmiyor.'); return; }
+  ADMIN_PASS = n1;
+  sessionStorage.setItem('admin_auth', ADMIN_PASS);
+  try { localStorage.setItem('admin_pass', ADMIN_PASS); } catch(e) {}
+  alert('✓ Şifre değiştirildi!');
+}
+// Load password from localStorage
+try { var sp = localStorage.getItem('admin_pass'); if(sp) ADMIN_PASS = sp; } catch(e) {}
+
+// Startup: load questions from Supabase, show loading overlay
+(async function() {
+  var overlay = document.getElementById('loading-overlay');
+  if (overlay) overlay.style.display = 'flex';
+  try {
+    await loadAdminQ();
+  } catch(e) {
+    console.warn('Startup load error:', e);
+  }
+  if (overlay) overlay.style.display = 'none';
+  showScreen('welcome');
+})();
+</script>
+</body>
+</html>
